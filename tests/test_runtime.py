@@ -117,15 +117,18 @@ def test_mitmdump_startup_status_and_real_403(tmp_path, mode):
                 authenticated.verify = str(tmp_path / "ca" / "mitmproxy-ca-cert.pem")
                 patch_url = "https://core-gmc.freefiremobile.com/live/ABHotUpdates/ios/1.132.10/codepatch/assembly-csharp-patch"
                 for _ in range(20):
-                    allowed = authenticated.get(patch_url, timeout=5)
+                    try:
+                        allowed = authenticated.get(patch_url, timeout=5)
+                    except requests.exceptions.ProxyError:
+                        time.sleep(0.25)
+                        continue
                     if allowed.status_code == 200:
                         break
                     time.sleep(0.25)
                 assert allowed.status_code == 200
                 assert allowed.content.startswith(b"\x1f\x8b")
-                missing = session.get(patch_url, proxies={"https": base},
-                                      verify=authenticated.verify, timeout=5)
-                assert missing.status_code == 403
+                with pytest.raises(requests.exceptions.ProxyError, match="407"):
+                    session.get(patch_url, proxies={"https": base}, verify=authenticated.verify, timeout=5)
                 del records["first-user"]
                 for _ in range(20):
                     revoked = authenticated.get(patch_url, timeout=5)

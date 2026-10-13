@@ -26,9 +26,12 @@ import hmac
 import html
 import ipaddress
 import json
+import logging
+from logging.handlers import RotatingFileHandler
 import os
 import re
 import ssl
+import sys
 import tempfile
 import time
 import threading
@@ -210,6 +213,38 @@ class FFHotUpdateAddon:
         self._auth_stop = threading.Event()
         self._auth_thread = None
         self._connection_credentials = {}
+        self._trace_times = {}
+        trace_suffix = "-test" if os.environ.get("PYTEST_CURRENT_TEST") or "pytest" in sys.modules else ""
+        self._events = logging.getLogger("ff-proxy-events" + trace_suffix)
+        self._events.setLevel(logging.INFO)
+        self._events.propagate = False
+        if not self._events.handlers:
+            os.makedirs(os.path.join(BASE, "logs"), exist_ok=True)
+            handler = RotatingFileHandler(os.path.join(BASE, "logs", f"proxy-events{trace_suffix}.log"),
+                                          maxBytes=1024 * 1024, backupCount=1, encoding="utf-8")
+            self._events.addHandler(handler)
+
+    def _trace(self, event, flow, status=None, reason=""):
+        if not is_ff(host_of(flow)):
+            return
+        path = path_only(flow)
+        signature = (event, host_of(flow), path, status, reason)
+        now = time.monotonic()
+        if now - self._trace_times.get(signature, -100) < 10:
+            return
+        if len(self._trace_times) > 256:
+            self._trace_times.clear()
+        self._trace_times[signature] = now
+        print(f"[GAME] {event} {host_of(flow)}{path[:160]} status={status} {reason}", flush=True)
+        self._events.info(json.dumps({
+            "time": time.time(), "event": event, "host": host_of(flow),
+            "pid": os.getpid(),
+            "path": path[:160], "status": status, "reason": reason,
+            "has_proxy_account": self._connection_key(flow.client_conn) in self._connection_credentials,
+            "elapsed_ms": round((now - flow.metadata.get("ff_started", now)) * 1000),
+            "response_bytes": len(flow.response.raw_content or b"") if flow.response is not None else None,
+            "auth_cache_age_ms": round((now - self.auth_cache_time) * 1000),
+        }, ensure_ascii=False))
 
     def _auth_worker(self) -> None:
         while not self._auth_stop.wait(2):
@@ -341,6 +376,7 @@ class FFHotUpdateAddon:
         self._auth_thread = threading.Thread(target=self._auth_worker, daemon=True)
         self._auth_thread.start()
         self.sync(force=True)
+        print("[READY] Proxy dang chay; log GAME hien ket noi, xac thuc va ma phan hoi.", flush=True)
         log(
             "info",
             f"READY fi={len(self.fi or b'')} patch={len(self.aim or b'')} "
@@ -394,6 +430,10 @@ class FFHotUpdateAddon:
         except Exception:
             msg = ""
         host = host_of(flow)
+        if is_ff(host):
+            low = msg.lower()
+            category = "tls" if "tls" in low else "dns" if "getaddrinfo" in low else "timeout" if "timeout" in low else "connection"
+            self._trace("upstream_error", flow, reason=category)
         if "11003" in msg or "getaddrinfo" in msg.lower():
             self.n_dns += 1
             if should_intercept(host):
@@ -414,9 +454,16 @@ class FFHotUpdateAddon:
 
     def http_connect(self, flow: http.HTTPFlow) -> None:
         self._capture_credentials(flow)
-        # Original PC mode checks game requests after TLS negotiation, allowing
-        # browsers, Telegram and iOS connectivity checks to work normally.
+        # Game tunnels use the standard 407 challenge before TLS. Unrelated
+        # browser/Telegram/iOS connectivity traffic remains available.
         if CONFIG.get("proxy_access_mode") == "game_only":
+            if is_ff(host_of(flow)):
+                authorized, reason = self.check_ip_authorized(flow)
+                self._trace("connect_auth", flow, 200 if authorized else 407, reason)
+                if not authorized:
+                    flow.response = http.Response.make(407, BLOCK_MSG.encode("utf-8"),
+                        {"Proxy-Authenticate": 'Basic realm="FFProxy", charset="UTF-8"',
+                         "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store"})
             return
         authorized, reason = self.check_ip_authorized(flow)
         if not authorized:
@@ -425,6 +472,7 @@ class FFHotUpdateAddon:
                                                {"Content-Type": "text/plain; charset=utf-8"})
 
     async def request(self, flow: http.HTTPFlow) -> None:
+        flow.metadata["ff_started"] = time.monotonic()
         self._capture_credentials(flow)
         self._strip_bearer(flow)
 
@@ -516,6 +564,7 @@ fetch('https://api.ipify.org?format=json').then(r => {
 
         # VPS strict mode checks all traffic; PC compatibility checks game only.
         is_auth, reason = self.check_ip_authorized(flow)
+        self._trace("request_auth", flow, 200 if is_auth else 403, reason)
         if not is_auth:
             flow.metadata["access_denied"] = True
             log("warn", f"[CHAN] {BLOCK_MSG} ({reason}) -> {host}{path}")
@@ -541,6 +590,13 @@ fetch('https://api.ipify.org?format=json').then(r => {
         self._replace(flow, "request")
 
     async def response(self, flow: http.HTTPFlow) -> None:
+        try:
+            await self._handle_response(flow)
+        finally:
+            if flow.response is not None:
+                self._trace("response", flow, flow.response.status_code)
+
+    async def _handle_response(self, flow: http.HTTPFlow) -> None:
         if flow.response is None or flow.metadata.get("access_denied"):
             return
         path = path_only(flow)

@@ -22,7 +22,7 @@ def build_commands(direct=False, proxy_only=False):
     proxy += ["--listen-host", "0.0.0.0", "--listen-port", str(port),
               "--set", "block_global=false", "--ssl-insecure",
               "--set", "connection_strategy=lazy", "--set", "upstream_cert=false",
-              "--set", "flow_detail=0", "--set", "termlog_verbosity=error",
+              "--set", "flow_detail=0", "--set", "termlog_verbosity=info",
               "-s", "proxy1.py"]
     commands = {
         "proxy": proxy,

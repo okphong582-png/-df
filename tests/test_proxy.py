@@ -212,3 +212,16 @@ def test_authenticated_export_does_not_create_unauthenticated_pac(tmp_path):
     uri = export("203.0.113.10", 1297, tmp_path, username="111", password="private-user-one")
     assert "111:private-user-one@" in uri
     assert not (tmp_path / "game-only.pac").exists()
+
+
+def test_game_connect_sends_standard_proxy_auth_challenge(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_credentials")
+    monkeypatch.setitem(proxy1.CONFIG, "proxy_access_mode", "game_only")
+    instance = addon()
+    request = flow("127.0.0.1")
+    instance.http_connect(request)
+    assert request.response.status_code == 407
+    assert request.response.headers["Proxy-Authenticate"].startswith("Basic ")
+    unrelated = flow("127.0.0.1", "https://example.org/")
+    instance.http_connect(unrelated)
+    assert unrelated.response is None

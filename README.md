@@ -147,8 +147,15 @@ thư mục khi dùng tunnel. Launcher ưu tiên mitmdump đã cài trên máy v�
 CA ở thư mục cấu hình người dùng, không thay CA đang cài trên iPhone.
 Để chạy trực tiếp LAN/VPS không có Bore: `python run_local.py --direct`.
 Chế độ PC khôi phục HTTP/1.1 như bản cũ; HTTP/2 vẫn bật trong chế độ VPS.
-Launcher không in từng kết nối/request: mitmdump chỉ hiện lỗi, Bore chỉ hiện
-cảnh báo/lỗi; lỗi socket 10053 lặp lại được giới hạn hiển thị mỗi 30 giây.
+Theo yêu cầu chẩn đoán, launcher hiển thị log kết nối và các dòng `[GAME]`
+cho biết bước xác thực/API/mã phản hồi. Không in body đăng nhập, mật khẩu hoặc
+query string trong dòng chẩn đoán. File `logs/proxy-events.log` có thời gian
+chờ, kích thước phản hồi và tuổi cache quyền. Log kiểm tra nằm ở file riêng.
+Bore chỉ hiện cảnh báo/lỗi; lỗi socket 10053 lặp lại được giới hạn hiển thị mỗi 30 giây.
+Kết nối HTTPS tới miền game trả chuẩn `407 Proxy Authentication Required`
+với `Proxy-Authenticate: Basic` nếu chưa xác thực, để ứng dụng proxy có thể
+gửi/nhập lại tài khoản trước khi tạo tunnel TLS. Quyền vẫn kiểm tra lại trên
+từng request sau khi TLS đã mở; không giữ kết quả cho phép sau thu hồi.
 Bore dùng IPv4 tới máy chủ và `--local-host 127.0.0.1` tới mitmdump để tránh
 nhầm localhost sang IPv6. Bot bỏ qua hàng đợi cũ khi khởi động; nếu đã gửi key
 trong lúc bot tắt, hãy gửi lại sau khi bot bật.
