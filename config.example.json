@@ -1,0 +1,10 @@
+{
+  "bot_token": "",
+  "admin_id": "",
+  "firebase_url": "",
+  "link4m_token": "",
+  "public_proxy_host": "127.0.0.1",
+  "public_proxy_port": 1297,
+  "web_host": "127.0.0.1",
+  "web_port": 8088
+}

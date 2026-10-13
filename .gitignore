@@ -1,0 +1,17 @@
+config.json
+.env
+.env.*
+!.env.example
+admin-config.js
+.venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.log
+*.pem
+*.key
+*.p12
+*.bak
+bore.exe
+dist/
+.mitmproxy/

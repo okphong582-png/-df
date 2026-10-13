@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Quản Lý Key & Cấp Quyền IP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Firebase App & Realtime Database SDK (Compat) -->
+  <script src="admin-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --primary-glow: rgba(59, 130, 246, 0.35);
+      --accent: #10b981;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --border-radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top right, #131b2e 0%, #090d16 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 20px var(--primary-glow);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(to right, #ffffff, #93c5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 999px;
+      color: #34d399;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 12px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--border-radius);
+      padding: 20px 24px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .stat-title {
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Create Key Form */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--border-radius);
+      padding: 28px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 16px;
+      align-items: end;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    input {
+      background: rgba(11, 15, 25, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #4f46e5);
+      color: #fff;
+      box-shadow: 0 4px 16px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--primary-hover), #4338ca);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-copy {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .key-badge {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .link-text {
+      color: #93c5fd;
+      text-decoration: none;
+      word-break: break-all;
+      max-width: 320px;
+      display: inline-block;
+    }
+
+    .link-text:hover {
+      text-decoration: underline;
+    }
+
+    .ip-badge {
+      font-family: 'Courier New', monospace;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .countdown {
+      font-weight: 600;
+      color: #fbbf24;
+    }
+
+    .expired {
+      color: #ef4444 !important;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1e293b;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      font-size: 14px;
+      font-weight: 600;
+      display: none;
+      z-index: 9999;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="logo-box">
+        <div class="logo-icon">🔑</div>
+        <div>
+          <h1>Bảng Điều Khiển Admin — Quản Lý Key & IP</h1>
+          <p style="color: var(--text-muted); font-size: 13px; margin-top: 2px;">
+            Hệ thống cấp quyền Free Fire Proxy qua Firebase Realtime Database
+          </p>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="dot"></span>
+        <span>Firebase Realtime Đã Kết Nối</span>
+      </div>
+    </header>
+
+    <!-- Thống kê nhanh -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-title">Số Key Khả Dụng</div>
+        <div class="stat-value" id="count-keys">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">IP Đang Được Cấp Quyền (24h)</div>
+        <div class="stat-value" id="count-ips">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-title">Admin ID Telegram</div>
+        <div class="stat-value" style="font-size: 20px; color: #a78bfa; margin-top: 6px;">6482147126</div>
+      </div>
+    </div>
+
+    <!-- Form Tự Động Tạo Hàng Loạt (Rentry + Link4m) -->
+    <div class="card" style="border: 1px solid rgba(59, 130, 246, 0.35); background: rgba(17, 24, 39, 0.85); box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);">
+      <div class="card-title" style="justify-content: space-between; display: flex; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">⚡</span>
+          <span>Tự Động Tạo Key Hàng Loạt (Rentry.co + Link4m API)</span>
+        </div>
+        <span style="font-size: 12px; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); padding: 4px 12px; border-radius: 999px; font-weight: 700;">Tự Động 100%</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">
+        Hệ thống sẽ tự động tạo mã Key, đăng paste chứa key lên <b>Rentry.co</b>, rút gọn link qua <b>Link4m API</b> và lưu trực tiếp lên Firebase.
+      </p>
+      <div class="form-grid" style="grid-template-columns: 140px 140px 1fr auto;">
+        <div class="input-group">
+          <label for="bulk-count">Số Lượng Key</label>
+          <input type="number" id="bulk-count" value="5" min="1" max="50">
+        </div>
+        <div class="input-group">
+          <label for="bulk-prefix">Tiền Tố (Prefix)</label>
+          <input type="text" id="bulk-prefix" value="MIZZE">
+        </div>
+        <div class="input-group">
+          <label for="bulk-token">Link4m API Token</label>
+          <input type="text" id="bulk-token" value="">
+        </div>
+        <button class="btn btn-primary" id="btn-bulk" onclick="startBulkGenerate()" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);">
+          <span>🚀 Bắt Đầu Tạo</span>
+        </button>
+      </div>
+      <div id="bulk-progress" style="display: none; margin-top: 16px; padding: 12px 16px; background: rgba(0,0,0,0.3); border-radius: 10px; font-size: 13px; color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2);">
+        <span class="dot"></span> <span id="bulk-status-text">Đang tự động kết nối API Rentry & Link4m...</span>
+      </div>
+    </div>
+
+    <!-- Form Tạo Key Mới Thủ Công -->
+    <div class="card">
+      <div class="card-title">
+        <span>✏️ Tạo Key Thủ Công (Link Tự Chọn)</span>
+      </div>
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="link-input">Link Get Key (Link rút gọn / nhiệm vụ) *</label>
+          <input type="text" id="link-input" placeholder="Ví dụ: https://link1s.com/getkey123" required>
+        </div>
+        <div class="input-group">
+          <label for="key-input">Mã Key Thật (Để trống để tự tạo ngẫu nhiên)</label>
+          <input type="text" id="key-input" placeholder="Ví dụ: FF-VIP-9999 hoặc tự sinh">
+        </div>
+        <button class="btn btn-primary" onclick="createKey()">
+          <span>+ Tạo Key & Lưu</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Bảng 1: Danh sách Key (2 Cột: Key Thật & Link Get Key) -->
+    <div class="card">
+      <div class="card-title">
+        <span>📋 Danh Sách Key Đang Khả Dụng</span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 250px;">Key Thật</th>
+              <th>Link Get Key</th>
+              <th style="width: 160px;">Thời Gian Tạo</th>
+              <th style="width: 120px; text-align: center;">Hành Động</th>
+            </tr>
+          </thead>
+          <tbody id="keys-table-body">
+            <tr>
+              <td colspan="4" class="empty-state">Đang tải danh sách key từ Firebase...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Bảng 2: Danh sách IP Mạng Đang Được Cấp Quyền (24h) -->
+    <div class="card">
+      <div class="card-title">
+        <span>🌐 Danh Sách IP Đang Chơi (Hạn 24H)</span>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 220px;">IP Mạng Đã Cấp Quyền</th>
+              <th style="width: 180px;">Telegram User ID</th>
+              <th>Thời Gian Còn Lại (24h)</th>
+              <th style="width: 140px; text-align: center;">Thu Hồi Quyền</th>
+            </tr>
+          </thead>
+          <tbody id="ips-table-body">
+            <tr>
+              <td colspan="4" class="empty-state">Chưa có IP nào kích hoạt.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast">Thông báo</div>
+
+  <script>
+    // 1. Cấu hình Firebase Realtime Database của người dùng
+    const firebaseConfig = window.ADMIN_FIREBASE_CONFIG;
+    if (!firebaseConfig) throw new Error("Thieu admin-config.js; xem README.md");
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // Hiển thị Toast
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 3000);
+    }
+
+    // Sao chép văn bản
+    function copyText(text, label) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`Đã sao chép ${label}!`);
+      });
+    }
+
+    // Hàm sinh mã key ngẫu nhiên
+    function randomKey() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let res = "FF-";
+      for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+      res += "-";
+      for (let i = 0; i < 4; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+      return res;
+    }
+
+    // 1.5. Tạo Key hàng loạt tự động qua Rentry.co + Link4m API
+    function startBulkGenerate() {
+      const count = parseInt(document.getElementById("bulk-count").value) || 5;
+      const prefix = document.getElementById("bulk-prefix").value.trim() || "MIZZE";
+      const token = document.getElementById("bulk-token").value.trim() || "";
+
+      const btn = document.getElementById("btn-bulk");
+      const prog = document.getElementById("bulk-progress");
+      const statusText = document.getElementById("bulk-status-text");
+
+      btn.disabled = true;
+      btn.style.opacity = "0.5";
+      prog.style.display = "block";
+      statusText.innerText = `Đang tự động tạo ${count} Key qua Rentry.co và Link4m API... Vui lòng chờ!`;
+
+      fetch(`http://localhost:8088/api/bulk_create?count=${count}&prefix=${encodeURIComponent(prefix)}&token=${encodeURIComponent(token)}`)
+        .then(res => res.json())
+        .then(data => {
+          btn.disabled = false;
+          btn.style.opacity = "1";
+          prog.style.display = "none";
+          if (data && data.status === "success") {
+            const num = (data.keys || []).length;
+            showToast(`🎉 Đã tạo thành công ${num} Key tự động!`);
+          } else {
+            alert("Có lỗi khi tạo key: " + (data.error || "Không rõ"));
+          }
+        })
+        .catch(err => {
+          btn.disabled = false;
+          btn.style.opacity = "1";
+          prog.style.display = "none";
+          alert("Không thể kết nối đến local API (Cổng 8088). Vui lòng đảm bảo bạn đang chạy start all.bat!");
+        });
+    }
+
+    // 2. Tạo Key mới & đẩy lên Firebase
+    function createKey() {
+      const linkInput = document.getElementById("link-input");
+      const keyInput = document.getElementById("key-input");
+
+      let link = linkInput.value.trim();
+      let key = keyInput.value.trim();
+
+      if (!link) {
+        alert("Vui lòng nhập Link Get Key!");
+        linkInput.focus();
+        return;
+      }
+
+      if (!key) {
+        key = randomKey();
+      }
+
+      // Lưu lên Firebase node /keys/{key}
+      const safeKey = key.replace(/[.#$\[\]]/g, "_");
+      db.ref("keys/" + safeKey).set({
+        key: key,
+        link: link,
+        createdAt: Date.now(),
+        durationHours: 24
+      }).then(() => {
+        showToast(`Tạo thành công Key: ${key}`);
+        linkInput.value = "";
+        keyInput.value = "";
+      }).catch(err => {
+        alert("Lỗi khi tạo key: " + err.message);
+      });
+    }
+
+    // 3. Xóa Key trên Firebase
+    function deleteKey(keyId) {
+      if (confirm(`Bạn có chắc muốn xóa Key: ${keyId}? Người dùng sẽ không thể sử dụng key này nữa!`)) {
+        db.ref("keys/" + keyId).remove().then(() => {
+          showToast(`Đã xóa Key: ${keyId}`);
+        }).catch(err => {
+          alert("Lỗi khi xóa key: " + err.message);
+        });
+      }
+    }
+
+    // 4. Thu hồi / Xóa IP được cấp quyền
+    function deleteIp(ipSafe, originalIp) {
+      if (confirm(`Bạn có chắc muốn thu hồi quyền IP: ${originalIp}? Game sẽ lập tức bị ngắt quyền và không chơi được nữa!`)) {
+        db.ref("authorized_ips/" + ipSafe).remove().then(() => {
+          showToast(`Đã thu hồi quyền IP: ${originalIp}`);
+        }).catch(err => {
+          alert("Lỗi khi xóa IP: " + err.message);
+        });
+      }
+    }
+
+    // 5. Lắng nghe dữ liệu Key Realtime từ Firebase
+    db.ref("keys").on("value", snapshot => {
+      const data = snapshot.val();
+      const tbody = document.getElementById("keys-table-body");
+      const countEl = document.getElementById("count-keys");
+
+      if (!data) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Chưa có key nào. Hãy tạo key ở ô phía trên!</td></tr>`;
+        countEl.innerText = "0";
+        return;
+      }
+
+      const keysList = Object.keys(data);
+      countEl.innerText = keysList.length;
+
+      let html = "";
+      keysList.forEach(k => {
+        const item = data[k];
+        const keyVal = item.key || k;
+        const linkVal = item.link || "";
+        const rentryVal = item.rentry || "";
+        const timeStr = item.createdAt ? new Date(item.createdAt).toLocaleString("vi-VN") : "Vừa tạo";
+
+        const rentryHtml = rentryVal ? `<div style="font-size: 11px; margin-top: 4px; color: var(--text-muted);"><a href="${escapeHtml(rentryVal)}" target="_blank" style="color: #a78bfa; text-decoration: none;">📄 Xem Rentry</a></div>` : "";
+
+        html += `
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="key-badge">${escapeHtml(keyVal)}</span>
+                <button class="btn btn-copy" onclick="copyText('${escapeHtml(keyVal)}', 'Key')">Copy</button>
+              </div>
+            </td>
+            <td>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <a class="link-text" href="${escapeHtml(linkVal)}" target="_blank">${escapeHtml(linkVal)}</a>
+                <button class="btn btn-copy" onclick="copyText('${escapeHtml(linkVal)}', 'Link')">Copy</button>
+              </div>
+              ${rentryHtml}
+            </td>
+            <td style="color: var(--text-muted); font-size: 13px;">${timeStr}</td>
+            <td style="text-align: center;">
+              <button class="btn btn-danger" onclick="deleteKey('${k}')">Xóa Key</button>
+            </td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    });
+
+    // 6. Lắng nghe dữ liệu IP Realtime từ Firebase
+    db.ref("authorized_ips").on("value", snapshot => {
+      const data = snapshot.val();
+      const tbody = document.getElementById("ips-table-body");
+      const countEl = document.getElementById("count-ips");
+
+      if (!data) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty-state">Chưa có IP nào đang hoạt động.</td></tr>`;
+        countEl.innerText = "0";
+        return;
+      }
+
+      const ipList = Object.keys(data);
+      const now = Date.now();
+      let activeCount = 0;
+      let html = "";
+
+      ipList.forEach(k => {
+        const item = data[k];
+        const ipVal = item.ip || k.replace(/_/g, ".");
+        const userId = item.userId || "Không rõ";
+        const expiresAt = item.expiresAt || 0;
+        const diffMs = expiresAt - now;
+
+        let timeRemaining = "";
+        let isExpired = false;
+
+        if (diffMs > 0) {
+          activeCount++;
+          const hours = Math.floor(diffMs / (1000 * 60 * 60));
+          const mins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+          timeRemaining = `Còn lại: ${hours} giờ ${mins} phút (Hết hạn: ${new Date(expiresAt).toLocaleTimeString("vi-VN")})`;
+        } else {
+          isExpired = true;
+          timeRemaining = "Đã hết hạn 24h";
+        }
+
+        html += `
+          <tr>
+            <td>
+              <span class="ip-badge">${escapeHtml(ipVal)}</span>
+            </td>
+            <td style="font-weight: 600; color: #a78bfa;">${escapeHtml(String(userId))}</td>
+            <td>
+              <span class="countdown ${isExpired ? 'expired' : ''}">${timeRemaining}</span>
+            </td>
+            <td style="text-align: center;">
+              <button class="btn btn-danger" onclick="deleteIp('${k}', '${escapeHtml(ipVal)}')">Thu Hồi</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      countEl.innerText = activeCount;
+      tbody.innerHTML = html;
+    });
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+* text=auto
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+Dockerfile text eol=lf
+*.bat text eol=crlf
+*.gz binary
+*.bin binary
+*.bytes binary
+*.png binary
+assembly-csharp-patch binary
