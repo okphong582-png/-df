@@ -6,11 +6,24 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip
       - run: pip install -r requirements-dev.txt
       - run: python -m pytest -q
       - run: docker build -t ff-proxy:test .
+      - name: Start container with persistent CA volume
+        run: |
+          docker run -d --name proxy-smoke -p 127.0.0.1:1297:1297 -v smoke-ca:/home/ffruntime/.mitmproxy -e FIREBASE_URL=http://127.0.0.1:9 -e PUBLIC_PROXY_HOST=127.0.0.1 ff-proxy:test
+          for attempt in {1..20}; do
+            if curl -fsS http://127.0.0.1:1297/healthz; then
+              docker exec proxy-smoke test -f /home/ffruntime/.mitmproxy/mitmproxy-ca-cert.pem
+              docker stop proxy-smoke
+              exit 0
+            fi
+            sleep 1
+          done
+          docker logs proxy-smoke
+          exit 1

@@ -7,7 +7,7 @@ services:
     ports:
       - "${PUBLIC_PROXY_PORT:-1297}:1297"
     volumes:
-      - proxy-ca:/home/proxy/.mitmproxy
+      - proxy-ca:/home/ffruntime/.mitmproxy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; assert urllib.request.urlopen('http://127.0.0.1:1297/healthz', timeout=3).status == 200"]
       interval: 30s
