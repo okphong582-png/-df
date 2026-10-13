@@ -22,6 +22,7 @@ import base64
 import asyncio
 import gzip
 import hashlib
+import hmac
 import html
 import ipaddress
 import json
@@ -208,9 +209,10 @@ class FFHotUpdateAddon:
         self.auth_cache_time = 0.0
         self._auth_stop = threading.Event()
         self._auth_thread = None
+        self._connection_credentials = {}
 
     def _auth_worker(self) -> None:
-        while not self._auth_stop.wait(5):
+        while not self._auth_stop.wait(2):
             self._refresh_auth_cache()
 
     def _refresh_auth_cache(self) -> None:
@@ -222,7 +224,7 @@ class FFHotUpdateAddon:
                 f"{FIREBASE_RTDB_URL}/authorized_ips.json",
                 headers={"User-Agent": "FFProxy/1.0"}
             )
-            with urllib.request.urlopen(req, timeout=3) as resp:
+            with urllib.request.urlopen(req, timeout=2) as resp:
                 if resp.status == 200:
                     data = json.loads(resp.read().decode("utf-8"))
                     self.auth_cache = data if isinstance(data, dict) else {}
@@ -246,7 +248,32 @@ class FFHotUpdateAddon:
                 pass
         return False
 
+    @staticmethod
+    def _connection_key(conn):
+        return str(getattr(conn, "id", id(conn)))
+
+    def _capture_credentials(self, flow):
+        key = self._connection_key(flow.client_conn)
+        header = flow.request.headers.pop("Proxy-Authorization", None)
+        if header is not None:
+            self._connection_credentials.pop(key, None)
+            try:
+                scheme, encoded = header.split(None, 1)
+                if scheme.lower() != "basic":
+                    return None
+                username, password = base64.b64decode(encoded, validate=True).decode("utf-8").split(":", 1)
+                if not re.fullmatch(r"\d{1,20}", username) or not 1 <= len(password) <= 256:
+                    return None
+                self._connection_credentials[key] = (username, password)
+            except (ValueError, UnicodeError):
+                return None
+        return self._connection_credentials.get(key)
+
+    def client_disconnected(self, client):
+        self._connection_credentials.pop(self._connection_key(client), None)
+
     def check_ip_authorized(self, flow: http.HTTPFlow) -> Tuple[bool, str]:
+        credentials = self._capture_credentials(flow)
         now_ms = int(time.time() * 1000)
         # Only the TCP peer is trusted. HTTP forwarding headers are client-controlled.
         client_ip = flow.client_conn.address[0] if flow.client_conn and flow.client_conn.address else ""
@@ -256,18 +283,22 @@ class FFHotUpdateAddon:
         except ValueError:
             return False, "Khong xac dinh duoc IP ket noi"
         # Refresh happens in one background worker, never in the request hook.
-        if time.monotonic() - self.auth_cache_time > 15:
+        if time.monotonic() - self.auth_cache_time > 6:
             return False, "Du lieu cap quyen chua san sang / mat ket noi Firebase"
         cache = self.auth_cache
-        # Bore strips the original peer IP. Opt-in PC compatibility restores the
-        # previous shared-tunnel behaviour, only for loopback TCP connections.
-        if CONFIG.get("auth_mode") == "tunnel_compat" and parsed_ip.is_loopback:
-            active = [item for item in cache.values() if isinstance(item, dict)
-                      and isinstance(item.get("expiresAt"), (int, float))
-                      and item["expiresAt"] > now_ms]
-            if active:
-                return True, f"Tunnel Bore tuong thich: {len(active)} quyen con han (khong phan biet IP goc)"
-            return False, "Chua co IP nao duoc cap quyen tren he thong"
+        if CONFIG.get("auth_mode") in ("tunnel_credentials", "tunnel_compat") and parsed_ip.is_loopback:
+            if not credentials:
+                return False, "Thieu tai khoan proxy rieng; lay cau hinh Potatso trong bot"
+            username, password = credentials
+            digest = hashlib.sha256(password.encode()).hexdigest()
+            for item in cache.values():
+                if not isinstance(item, dict) or str(item.get("userId", "")) != username:
+                    continue
+                expiry, token_hash = item.get("expiresAt", 0), item.get("proxyTokenHash", "")
+                if (isinstance(expiry, (int, float)) and expiry > now_ms
+                        and isinstance(token_hash, str) and hmac.compare_digest(token_hash, digest)):
+                    return True, "Tai khoan proxy rieng con quyen"
+            return False, "Tai khoan proxy sai, het han hoac da bi thu hoi"
         safe_ip = check_ip.replace(".", "_").replace(":", "_")
         if safe_ip in cache:
             item = cache[safe_ip]
@@ -382,6 +413,7 @@ class FFHotUpdateAddon:
         log("warn", f"flow error {host}: {msg}")
 
     def http_connect(self, flow: http.HTTPFlow) -> None:
+        self._capture_credentials(flow)
         # Original PC mode checks game requests after TLS negotiation, allowing
         # browsers, Telegram and iOS connectivity checks to work normally.
         if CONFIG.get("proxy_access_mode") == "game_only":
@@ -393,6 +425,7 @@ class FFHotUpdateAddon:
                                                {"Content-Type": "text/plain; charset=utf-8"})
 
     async def request(self, flow: http.HTTPFlow) -> None:
+        self._capture_credentials(flow)
         self._strip_bearer(flow)
 
         host = host_of(flow)
@@ -437,7 +470,7 @@ class FFHotUpdateAddon:
                                                        {"Content-Type": "text/plain; charset=utf-8"})
                     return
             if parsed_ip.is_loopback:
-                if CONFIG.get("auth_mode") == "tunnel_compat":
+                if CONFIG.get("auth_mode") in ("tunnel_credentials", "tunnel_compat"):
                     firebase_pending = f"{FIREBASE_RTDB_URL}/pending_ips/{uid}.json"
                     script = """<!doctype html><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">

@@ -8,7 +8,7 @@ hộp thoại lỗi dựng sẵn trong game. Xem câu này và lý do tại
 `http://IP-MAY-CHU:1297/status`. Không tuyên bố đã đổi được giao diện game.
 
 Bot chỉ báo kích hoạt thành công khi ghi quyền IP vào Firebase thành công.
-IP hết hạn, sai IP hoặc dữ liệu Firebase mất cập nhật quá 15 giây đều bị từ chối.
+IP hết hạn, sai IP hoặc dữ liệu Firebase mất cập nhật quá 6 giây đều bị từ chối.
 Địa chỉ IP mạng di động có thể đổi: cần nhận diện lại và cấp quyền đúng IP.
 
 ## Chạy khi tắt PC
@@ -45,34 +45,57 @@ Healthcheck chỉ báo trạng thái, không tự sửa treo tiến trình hoặ
 
 **159.223.110.159 trong bản cũ là địa chỉ tunnel đã được ghi cứng, không phải VPS
 đã được cấp cho bạn.** Tunnel vẫn cần PC chạy. Kết nối Bore làm proxy thấy 127.0.0.1.
-**Chế độ PC qua launcher đã khôi phục cách cũ:** khi có ít nhất một quyền còn
-hạn trong Firebase, các kết nối qua Bore (peer loopback) được phép dùng phần
-game. Do Bore che IP gốc, chế độ này dùng quyền chung cho tunnel, không phân
-biệt từng người. Khi hết mọi quyền, các endpoint game được bảo vệ vẫn bị chặn.
-Lưu lượng Internet ngoài game đi qua như trước. Chế độ VPS/Docker vẫn kiểm tra
-đúng IP trên mọi kết nối; không tin header X-Forwarded-For do khách gửi.
-Nên kết nối thẳng tới VPS khi cần phân quyền riêng từng IP.
+**Đã bỏ quyền dùng chung tunnel.** Chế độ PC dùng `AUTH_MODE=tunnel_credentials`:
+mỗi người cần username/password proxy riêng, gắn với bản ghi quyền IP trong
+Firebase. Thu hồi/xóa bản ghi hoặc hết hạn sẽ chặn tài khoản tương ứng dù
+người khác vẫn còn quyền. Chế độ cũ `tunnel_compat` cũng yêu cầu tài khoản;
+không có nhánh nào cho qua chỉ vì có một IP khác đang hoạt động.
+
+Bot lưu hash SHA-256 của mật khẩu; mật khẩu chỉ trả riêng cho người yêu cầu.
+Proxy kiểm tra lại quyền trên từng lượt tải fileinfo/codepatch và đăng nhập,
+kể cả kết nối HTTPS đã mở. Worker lấy quyền khoảng mỗi 2 giây; thay đổi thường
+có hiệu lực trong 2–4 giây. Nếu Firebase không cập nhật quá 6 giây, proxy từ
+chối lượt tải được bảo vệ. Đây không phải cam kết ngắt tức thì.
+
+**File đã tải, cache hoặc nạp trong game không thể thu hồi/xóa từ xa bằng proxy.**
+Thu hồi quyền chặn các lượt tải mới đi qua proxy; không bảo đảm đá được phiên
+chơi/UDP đã tồn tại hoặc ngăn người dùng đọc bản file đã lưu trước đó.
+
+Chế độ VPS/Docker vẫn kiểm tra đúng IP trên mọi kết nối; không tin header
+X-Forwarded-For do khách gửi. Chế độ tunnel kiểm tra tài khoản thay cho IP gốc
+vì Bore không chuyển tiếp IP gốc. Mật khẩu được gửi theo HTTP Basic tới proxy;
+Bore/HTTP không cung cấp mã hóa cho phần thông tin xác thực này. Không dùng lại
+mật khẩu tài khoản khác. Firebase Database Rules hiện có vẫn cần kiểm soát
+quyền ghi; bản này chưa triển khai Firebase Auth/Rules mới.
 
 ## iPhone / Potatso
 
-Đã kèm `client/potatso-uri.txt`, QR và subscription cho **địa chỉ cũ**
-159.223.110.159:1297 để tiện nhập. Đây là cấu hình, không phải bằng chứng server
-đang online. Khi có VPS thật, tạo lại:
+**Cấu hình cũ chỉ có IP/cổng không còn được tải patch qua Bore.**
+Trong Telegram bot: bấm `/start` → **📲 Cấu hình Potatso riêng**. Nếu bản ghi
+quyền của bạn còn hạn, bot cấp username/password và URI để nhập. Người chưa
+có quyền hoặc đã bị thu hồi phải xác thực key trước; nút này không tự cấp lại
+quyền. Mỗi lần lấy lại cấu hình sẽ đổi mật khẩu của bản ghi được chọn và làm
+cấu hình trước đó hết hiệu lực sau khi proxy cập nhật.
+
+Trong Potatso: Add Proxy / Import → URI, dán URI có username/password mà bot
+trả về. Hoặc nhập Type **HTTP**, Host **159.223.110.159**, Port **1297**,
+Username/Password theo bot. Lưu, chọn proxy và nhấn Connect. Lấy cấu hình khi
+VPN đang tắt để bot/trình duyệt có thể hoạt động trước khi cấp quyền.
+Đổi IP/domain thành VPS của bạn khi có VPS; địa chỉ trên là tunnel cũ.
+
+Các file mẫu trong `client/` chỉ chứa endpoint, không phải cấu hình được cấp
+quyền. Không đăng URI/mật khẩu riêng lên GitHub hoặc chia sẻ cho người khác.
+Muốn xuất file/QR cá nhân trên máy:
 
 ```sh
 python -m pip install 'qrcode[pil]'
-python make_potatso.py --host IP-VPS-CUA-BAN --port 1297
+python make_potatso.py --host 159.223.110.159 --port 1297 --username TELEGRAM_USER_ID
+# Nhập password khi được hỏi; kết quả ở dist/potatso (được gitignore).
 ```
 
-Trong Potatso, Add Proxy / Import → URI, dán dòng trong `potatso-uri.txt`,
-hoặc quét `potatso-qr.png`. Nếu phiên bản app không nhận URI HTTP, nhập thủ công:
-Type **HTTP**, Host **IP-VPS**, Port **1297**, không nhập username/password.
-Không chọn SOCKS5, Shadowsocks hoặc HTTPS: server hiện là HTTP proxy có CONNECT.
-Subscription là danh sách URI được base64; hỗ trợ nhập tùy phiên bản app.
-Lấy key và cấp quyền IP khi VPN đang tắt trước; dùng cùng mạng khi bật lại VPN.
-Lưu proxy, chọn proxy rồi nhấn Connect và cho phép iOS tạo cấu hình VPN.
-File không thể tự cài/bật VPN hoặc đảm bảo tự nối lại nếu app không hỗ trợ.
-Chưa kiểm thử trực tiếp trên iPhone/Potatso của bạn.
+File không tự cài/bật VPN hoặc đảm bảo app tự nối lại. Chưa thử trực tiếp trên
+Potatso/iPhone của bạn; kiểm tra giao thức HTTP Basic qua CONNECT bằng mitmdump
+thật đã có trong bộ test.
 
 Game đang dùng MITM cần chứng chỉ CA của **đúng máy chủ**. Sau khi IP đã được
 cấp quyền, bật proxy, mở `http://mitm.it`, tải chứng chỉ iOS, cài hồ sơ trong
@@ -83,7 +106,7 @@ hoặc chia sẻ `mitmproxy-ca.pem` (chứa private key).
 
 ## Tốc độ mạng / game
 
-- Kiểm tra IP dùng snapshot trong RAM; một worker cập nhật mỗi 5 giây, không
+- Kiểm tra IP dùng snapshot trong RAM; một worker cập nhật khoảng mỗi 2 giây, không
   gọi Firebase cho từng request hoặc mỗi lần gặp IP lạ.
 - Bật HTTP/2 ở chế độ VPS, giữ kết nối upstream, giảm timeout thử CDN khác xuống 4 giây mỗi
   máy; thử CDN dự phòng chạy ở worker để không chặn toàn bộ event loop.
@@ -93,8 +116,9 @@ hoặc chia sẻ `mitmproxy-ca.pem` (chứa private key).
   Potatso có hỗ trợ, chỉ đưa `freefiremobile.com`, `purplevioleto.com`,
   `ppmainecoonghj.com` và subdomain qua proxy, mặc định DIRECT. Không đổi cổng
   thành SOCKS để thử tăng tốc. HTTP proxy không cung cấp UDP relay cho game.
-- `client/game-only.pac` là lựa chọn riêng cho HTTP proxy tự động của Wi-Fi
-  iOS, **không phải file VPN Potatso**. Host PAC bằng HTTPS ở nơi bạn quản lý
+- `client/game-only.pac` là mẫu HTTP proxy tự động cho Wi-Fi ở chế độ VPS/LAN
+  cấp quyền trực tiếp theo IP, **không dùng cho chế độ Bore cần tài khoản riêng**.
+  PAC không tự chứa username/password và không phải file VPN Potatso. Host PAC bằng HTTPS ở nơi bạn quản lý
   rồi nhập URL trong Wi-Fi → Định cấu hình proxy → Tự động. Nó đưa các miền
   game qua proxy và phần còn lại DIRECT. Không dùng đồng thời với VPN toàn bộ
   lưu lượng vì VPN có thể ghi đè đường đi; PAC không áp dụng cho dữ liệu di động.
@@ -145,9 +169,11 @@ python -m pytest -q
 
 Bao gồm kiểm tra quyền chính xác, hết hạn, snapshot quá cũ, giả mạo header,
 không mở proxy công cộng cho IP chưa cấp quyền, phản hồi 403 giữ nguyên,
-host ngoài game không bị thay patch, cấu hình URI và tính toàn vẹn gzip.
+host ngoài game không bị thay patch, cấu hình URI, tài khoản riêng, thu hồi trên kết nối HTTPS đang mở dù người khác còn quyền, và tính toàn vẹn gzip.
 
 Nguồn: [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages),
 [Docker restart policies](https://docs.docker.com/engine/containers/start-containers-automatically/),
 [Potatso trên App Store](https://apps.apple.com/us/app/potatso/id1239860606),
 [Chứng chỉ mitmproxy](https://docs.mitmproxy.org/stable/concepts/certificates/).
+
+Việc cấp lại mật khẩu dùng [Firebase conditional requests](https://firebase.google.com/docs/database/rest/save-data#section-conditional-requests) để tránh ghi đè khôi phục bản ghi vừa bị admin xóa.

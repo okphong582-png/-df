@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import gzip
+import hashlib
 import time
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -131,10 +132,10 @@ def test_pc_compat_keeps_non_game_internet_working(monkeypatch):
     assert request.response is None
 
 
-def test_bore_compat_grants_loopback_only_with_active_session(monkeypatch):
+def test_bore_never_grants_shared_access_even_in_old_compat_mode(monkeypatch):
     monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_compat")
     instance = addon()
-    assert instance.check_ip_authorized(flow("127.0.0.1"))[0]
+    assert not instance.check_ip_authorized(flow("127.0.0.1"))[0]
     assert not instance.check_ip_authorized(flow("203.0.113.11"))[0]
     instance.auth_cache["203_0_113_10"]["expiresAt"] = 1
     assert not instance.check_ip_authorized(flow("127.0.0.1"))[0]
@@ -154,4 +155,60 @@ def test_pc_launcher_restores_mitm_bore_and_optional_bot(tmp_path, monkeypatch):
     assert "flow_detail=0" in commands["proxy"]
     assert "bot" in build_commands()
     assert "bore" not in build_commands(direct=True)
-    assert child_environment()["AUTH_MODE"] == "tunnel_compat"
+    assert child_environment()["AUTH_MODE"] == "tunnel_credentials"
+
+
+def set_credentials(request, uid="111", password="private-user-one"):
+    request.request.headers["Proxy-Authorization"] = "Basic " + base64.b64encode(f"{uid}:{password}".encode()).decode()
+
+
+def test_individual_tunnel_credential_and_revoke_with_other_active_user(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_credentials")
+    instance = addon()
+    instance.auth_cache["user1"] = {"userId": "111", "expiresAt": (time.time() + 3600) * 1000,
+        "proxyTokenHash": hashlib.sha256(b"private-user-one").hexdigest()}
+    instance.auth_cache["user2"] = {"userId": "222", "expiresAt": (time.time() + 3600) * 1000,
+        "proxyTokenHash": hashlib.sha256(b"private-user-two").hexdigest()}
+    request = flow("127.0.0.1")
+    set_credentials(request)
+    assert instance.check_ip_authorized(request)[0]
+    assert "Proxy-Authorization" not in request.request.headers
+    del instance.auth_cache["user1"]
+    # Reusing the established connection cannot reuse a cached authorization.
+    assert not instance.check_ip_authorized(request)[0]
+    assert "user2" in instance.auth_cache
+
+
+def test_bad_missing_expired_and_disconnected_credentials(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_credentials")
+    instance = addon()
+    instance.auth_cache["user1"] = {"userId": "111", "expiresAt": (time.time() + 3600) * 1000,
+        "proxyTokenHash": hashlib.sha256(b"private-user-one").hexdigest()}
+    request = flow("127.0.0.1")
+    assert not instance.check_ip_authorized(request)[0]
+    set_credentials(request, password="wrong")
+    assert not instance.check_ip_authorized(request)[0]
+    set_credentials(request)
+    assert instance.check_ip_authorized(request)[0]
+    instance.client_disconnected(request.client_conn)
+    assert not instance.check_ip_authorized(request)[0]
+    set_credentials(request)
+    instance.auth_cache["user1"]["expiresAt"] = 1
+    assert not instance.check_ip_authorized(request)[0]
+
+
+def test_patch_response_cannot_bypass_revocation(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_credentials")
+    instance = addon()
+    request = flow("127.0.0.1", "https://core-gmc.freefiremobile.com/live/ABHotUpdates/ios/codepatch/assembly-csharp-patch")
+    set_credentials(request)
+    request.response = http.Response.make(200, b"upstream-patch")
+    asyncio.run(instance.response(request))
+    assert request.response.status_code == 403
+    assert request.response.content != instance.aim
+
+
+def test_authenticated_export_does_not_create_unauthenticated_pac(tmp_path):
+    uri = export("203.0.113.10", 1297, tmp_path, username="111", password="private-user-one")
+    assert "111:private-user-one@" in uri
+    assert not (tmp_path / "game-only.pac").exists()

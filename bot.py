@@ -5,12 +5,14 @@ import time
 from datetime import datetime
 import threading
 import ipaddress
+import html
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs, quote
 import requests
 import telebot
 from telebot import types
 from settings import load_config
+from proxy_accounts import new_secret, proxy_uri
 
 # Fix console encoding on Windows
 if hasattr(sys.stdout, "reconfigure"):
@@ -56,6 +58,48 @@ def ip_to_key(ip):
 
 def key_to_ip(safe_ip):
     return str(safe_ip).replace("_", ".")
+
+
+def proxy_credentials_text(uid, secret):
+    uri = proxy_uri(PUBLIC_PROXY_HOST, PUBLIC_PROXY_PORT, uid, secret)
+    return ("📲 <b>Cấu hình Potatso riêng</b>\n"
+            f"Type: <b>HTTP</b> — Host: <code>{html.escape(PUBLIC_PROXY_HOST)}</code> — Port: <code>{PUBLIC_PROXY_PORT}</code>\n"
+            f"Username: <code>{uid}</code>\nPassword: <code>{secret}</code>\n\n"
+            f"Import → URI:\n<code>{html.escape(uri)}</code>\n\n"
+            "Giữ riêng tài khoản này. Thu hồi quyền IP sẽ chặn lượt tải mới qua tài khoản; "
+            "file đã nạp không thể xóa từ xa. Chờ khoảng 2–4 giây để proxy cập nhật.")
+
+
+def issue_proxy_credentials(uid):
+    """Rotate this user's active credential without resurrecting a revoked row."""
+    records = fb_get("authorized_ips")
+    if not isinstance(records, dict):
+        return None
+    now_ms = time.time() * 1000
+    for safe_ip, item in records.items():
+        if not isinstance(item, dict) or str(item.get("userId", "")) != str(uid):
+            continue
+        if not isinstance(item.get("expiresAt"), (int, float)) or item["expiresAt"] <= now_ms:
+            continue
+        url = f"{FIREBASE_URL}/authorized_ips/{safe_ip}.json"
+        try:
+            response = requests.get(url, headers={"X-Firebase-ETag": "true"}, timeout=6)
+            current, etag = response.json(), response.headers.get("ETag")
+            if response.status_code != 200 or not etag or not isinstance(current, dict):
+                continue
+            if (str(current.get("userId", "")) != str(uid)
+                    or not isinstance(current.get("expiresAt"), (int, float))
+                    or current["expiresAt"] <= time.time() * 1000):
+                continue
+            secret, token_hash = new_secret()
+            current["proxyTokenHash"] = token_hash
+            saved = requests.put(url, json=current, headers={"If-Match": etag}, timeout=6)
+            if saved.status_code == 200:
+                return secret
+            # A 412 means an admin modified/deleted the grant concurrently.
+        except (requests.RequestException, ValueError):
+            continue
+    return None
 
 LINK4M_TOKEN = cfg.get("link4m_token", "").strip()
 
@@ -191,7 +235,7 @@ def build_main_menu(uid, name):
         f"👤 <b>Người dùng:</b> {name} <code>({uid})</code>\n"
         f"🌐 <b>IP Mạng:</b> {ip_display}\n"
         f"📊 <b>Trạng thái:</b> {status_str}\n"
-        f"🛡️ <b>Server Proxy:</b> <code>159.223.110.159:1297</code>\n\n"
+        f"🛡️ <b>Server Proxy:</b> <code>{html.escape(PUBLIC_PROXY_HOST)}:{PUBLIC_PROXY_PORT}</code>\n\n"
         "────────────────────────────────────────\n"
         "📌 <b>Hướng dẫn sử dụng:</b>\n"
         "1. Bấm <b>🔗 Lấy Link Get Key</b> để lấy link vượt mã.\n"
@@ -206,6 +250,7 @@ def build_main_menu(uid, name):
     markup.add(
         types.InlineKeyboardButton("🔗 Lấy Link Get Key", callback_data="get_key"),
         types.InlineKeyboardButton("🔑 Xác Thực Key", callback_data="prompt_key"),
+        types.InlineKeyboardButton("📲 Cấu hình Potatso riêng", callback_data="proxy_config"),
         types.InlineKeyboardButton("🌐 Tự Động Lấy IP Mạng", url=track_ip_link),
         types.InlineKeyboardButton("🔄 Làm Mới Menu", callback_data="refresh_menu")
     )
@@ -286,6 +331,14 @@ def handle_callback(call):
         text, markup = build_main_menu(uid, name)
         safe_edit_menu(chat_id, text, markup)
         bot.answer_callback_query(call.id, "✅ Đã làm mới trạng thái!", show_alert=False)
+
+    elif data == "proxy_config":
+        bot.answer_callback_query(call.id, "Đang kiểm tra quyền...")
+        secret = issue_proxy_credentials(uid)
+        text = proxy_credentials_text(uid, secret) if secret else "Bạn chưa có quyền còn hạn hoặc quyền vừa bị thu hồi. Hãy xác thực key trước."
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton("🔙 Quay Lại Menu", callback_data="main_menu"))
+        safe_edit_menu(chat_id, text, markup)
 
     elif data == "get_key":
         waiting_for_key[uid] = False
@@ -536,13 +589,15 @@ def handle_text_messages(msg):
     expire_dt = datetime.fromtimestamp(expires_ms / 1000).strftime("%H:%M %d/%m/%Y")
 
     safe_ip = ip_to_key(target_ip)
+    proxy_secret, proxy_token_hash = new_secret()
     auth_data = {
         "ip": target_ip,
         "userId": uid,
         "username": msg.from_user.username or msg.from_user.first_name or "",
         "keyUsed": key_input,
         "activatedAt": now_ms,
-        "expiresAt": expires_ms
+        "expiresAt": expires_ms,
+        "proxyTokenHash": proxy_token_hash
     }
 
     # 1. Lưu IP vào Firebase
@@ -562,7 +617,7 @@ def handle_text_messages(msg):
         f"⏳ <b>Thời hạn chơi:</b> 24 Giờ\n"
         f"⏰ <b>Hết hạn vào lúc:</b> <code>{expire_dt}</code>\n\n"
         + ("✅ <b>Đã xóa mã Key khỏi hệ thống.</b>\n" if deleted else "⚠️ Chưa xóa được key; hãy báo admin.\n")
-        + f"👉 Proxy: <code>{PUBLIC_PROXY_HOST}:{PUBLIC_PROXY_PORT}</code>. Chờ khoảng 5–8 giây để cập nhật quyền."
+        + "\n" + proxy_credentials_text(uid, proxy_secret)
     )
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("🔙 Quay Lại Menu Chính", callback_data="main_menu"))

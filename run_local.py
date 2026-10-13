@@ -44,7 +44,7 @@ def build_commands(direct=False, proxy_only=False):
 def child_environment(direct=False):
     env = os.environ.copy()
     if not direct:
-        env.update(AUTH_MODE="tunnel_compat", PROXY_ACCESS_MODE="game_only", PROXY_HTTP2="false")
+        env.update(AUTH_MODE="tunnel_credentials", PROXY_ACCESS_MODE="game_only", PROXY_HTTP2="false")
     env["PYTHONIOENCODING"] = "utf-8"
     env.update(PYTHONUNBUFFERED="1", RUST_LOG="warn", NO_COLOR="1")
     return env

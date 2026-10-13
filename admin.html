@@ -623,7 +623,7 @@
 
     // 4. Thu hồi / Xóa IP được cấp quyền
     function deleteIp(ipSafe, originalIp) {
-      if (confirm(`Bạn có chắc muốn thu hồi quyền IP: ${originalIp}? Game sẽ lập tức bị ngắt quyền và không chơi được nữa!`)) {
+      if (confirm(`Thu hồi quyền IP: ${originalIp}? Các lượt tải mới qua proxy sẽ bị chặn sau khi cập nhật quyền (thường 2–4 giây). File đã tải/nạp vào game không thể xóa từ xa.`)) {
         db.ref("authorized_ips/" + ipSafe).remove().then(() => {
           showToast(`Đã thu hồi quyền IP: ${originalIp}`);
         }).catch(err => {

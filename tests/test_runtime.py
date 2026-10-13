@@ -10,6 +10,7 @@ import time
 import ssl
 import shutil
 import datetime
+import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import requests
@@ -22,12 +23,13 @@ from cryptography.x509.oid import NameOID
 
 @pytest.mark.parametrize("mode", ["strict", "pc_compat"])
 def test_mitmdump_startup_status_and_real_403(tmp_path, mode):
+    records = {}
     class Firebase(BaseHTTPRequestHandler):
         def do_GET(self):
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({}).encode())
+            self.wfile.write(json.dumps(records.copy()).encode())
 
         def log_message(self, *args):
             pass
@@ -42,7 +44,7 @@ def test_mitmdump_startup_status_and_real_403(tmp_path, mode):
     env["FIREBASE_URL"] = f"http://127.0.0.1:{fake.server_port}"
     env["PUBLIC_PROXY_HOST"] = "127.0.0.1"
     if mode == "pc_compat":
-        env.update(AUTH_MODE="tunnel_compat", PROXY_ACCESS_MODE="game_only", PROXY_HTTP2="false")
+        env.update(AUTH_MODE="tunnel_credentials", PROXY_ACCESS_MODE="game_only", PROXY_HTTP2="false")
     else:
         env.update(AUTH_MODE="direct", PROXY_ACCESS_MODE="strict")
     engine = shutil.which("mitmdump") if mode == "pc_compat" else None
@@ -104,6 +106,35 @@ def test_mitmdump_startup_status_and_real_403(tmp_path, mode):
                 finally:
                     tls_origin.shutdown()
                     tls_origin.server_close()
+                records["first-user"] = {"userId": "111", "expiresAt": (time.time() + 3600) * 1000,
+                    "proxyTokenHash": hashlib.sha256(b"private-user-one").hexdigest()}
+                records["other-user"] = {"userId": "222", "expiresAt": (time.time() + 3600) * 1000,
+                    "proxyTokenHash": hashlib.sha256(b"private-user-two").hexdigest()}
+                authenticated = requests.Session()
+                authenticated.trust_env = False
+                auth_proxy = f"http://111:private-user-one@127.0.0.1:{port}"
+                authenticated.proxies = {"https": auth_proxy}
+                authenticated.verify = str(tmp_path / "ca" / "mitmproxy-ca-cert.pem")
+                patch_url = "https://core-gmc.freefiremobile.com/live/ABHotUpdates/ios/1.132.10/codepatch/assembly-csharp-patch"
+                for _ in range(20):
+                    allowed = authenticated.get(patch_url, timeout=5)
+                    if allowed.status_code == 200:
+                        break
+                    time.sleep(0.25)
+                assert allowed.status_code == 200
+                assert allowed.content.startswith(b"\x1f\x8b")
+                missing = session.get(patch_url, proxies={"https": base},
+                                      verify=authenticated.verify, timeout=5)
+                assert missing.status_code == 403
+                del records["first-user"]
+                for _ in range(20):
+                    revoked = authenticated.get(patch_url, timeout=5)
+                    if revoked.status_code == 403:
+                        break
+                    time.sleep(0.25)
+                assert revoked.status_code == 403
+                assert "other-user" in records
+                authenticated.close()
         finally:
             process.terminate()
             process.wait(timeout=10)
