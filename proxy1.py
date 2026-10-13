@@ -244,6 +244,7 @@ class FFHotUpdateAddon:
             "elapsed_ms": round((now - flow.metadata.get("ff_started", now)) * 1000),
             "response_bytes": len(flow.response.raw_content or b"") if flow.response is not None else None,
             "auth_cache_age_ms": round((now - self.auth_cache_time) * 1000),
+            "auth_input": flow.metadata.get("proxy_auth_observed", {}),
         }, ensure_ascii=False))
 
     def _auth_worker(self) -> None:
@@ -289,6 +290,19 @@ class FFHotUpdateAddon:
 
     def _capture_credentials(self, flow):
         key = self._connection_key(flow.client_conn)
+        flow.metadata.setdefault("proxy_auth_observed", {
+            "proxy_authorization_header": "Proxy-Authorization" in flow.request.headers,
+            "mitm_auth_metadata": isinstance(flow.metadata.get("proxyauth"), (tuple, list)),
+            "header_names": sorted(name.lower() for name in flow.request.headers),
+        })
+        # The built-in ProxyAuth addon may already have consumed the header.
+        # Its metadata is server-generated, and still checked against live grants.
+        native_credentials = flow.metadata.get("proxyauth")
+        if (isinstance(native_credentials, (tuple, list)) and len(native_credentials) == 2
+                and all(isinstance(value, str) for value in native_credentials)
+                and re.fullmatch(r"\d{1,20}", native_credentials[0])
+                and 1 <= len(native_credentials[1]) <= 256):
+            self._connection_credentials[key] = tuple(native_credentials)
         header = flow.request.headers.pop("Proxy-Authorization", None)
         if header is not None:
             self._connection_credentials.pop(key, None)

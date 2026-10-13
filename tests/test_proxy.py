@@ -225,3 +225,15 @@ def test_game_connect_sends_standard_proxy_auth_challenge(monkeypatch):
     unrelated = flow("127.0.0.1", "https://example.org/")
     instance.http_connect(unrelated)
     assert unrelated.response is None
+
+
+def test_native_mitm_auth_metadata_is_rechecked_against_live_grants(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_credentials")
+    instance = addon()
+    instance.auth_cache["user1"] = {"userId": "111", "expiresAt": (time.time() + 3600) * 1000,
+        "proxyTokenHash": hashlib.sha256(b"private-user-one").hexdigest()}
+    request = flow("127.0.0.1")
+    request.metadata["proxyauth"] = ("111", "private-user-one")
+    assert instance.check_ip_authorized(request)[0]
+    del instance.auth_cache["user1"]
+    assert not instance.check_ip_authorized(request)[0]
