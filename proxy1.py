@@ -259,6 +259,15 @@ class FFHotUpdateAddon:
         if time.monotonic() - self.auth_cache_time > 15:
             return False, "Du lieu cap quyen chua san sang / mat ket noi Firebase"
         cache = self.auth_cache
+        # Bore strips the original peer IP. Opt-in PC compatibility restores the
+        # previous shared-tunnel behaviour, only for loopback TCP connections.
+        if CONFIG.get("auth_mode") == "tunnel_compat" and parsed_ip.is_loopback:
+            active = [item for item in cache.values() if isinstance(item, dict)
+                      and isinstance(item.get("expiresAt"), (int, float))
+                      and item["expiresAt"] > now_ms]
+            if active:
+                return True, f"Tunnel Bore tuong thich: {len(active)} quyen con han (khong phan biet IP goc)"
+            return False, "Chua co IP nao duoc cap quyen tren he thong"
         safe_ip = check_ip.replace(".", "_").replace(":", "_")
         if safe_ip in cache:
             item = cache[safe_ip]
@@ -373,6 +382,10 @@ class FFHotUpdateAddon:
         log("warn", f"flow error {host}: {msg}")
 
     def http_connect(self, flow: http.HTTPFlow) -> None:
+        # Original PC mode checks game requests after TLS negotiation, allowing
+        # browsers, Telegram and iOS connectivity checks to work normally.
+        if CONFIG.get("proxy_access_mode") == "game_only":
+            return
         authorized, reason = self.check_ip_authorized(flow)
         if not authorized:
             log("warn", f"[CHAN CONNECT] {reason}")
@@ -424,6 +437,31 @@ class FFHotUpdateAddon:
                                                        {"Content-Type": "text/plain; charset=utf-8"})
                     return
             if parsed_ip.is_loopback:
+                if CONFIG.get("auth_mode") == "tunnel_compat":
+                    firebase_pending = f"{FIREBASE_RTDB_URL}/pending_ips/{uid}.json"
+                    script = """<!doctype html><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<p id="message">Đang nhận diện IP mạng...</p><script>
+const pending = PENDING_URL;
+const target = REDIRECT_URL;
+fetch('https://api.ipify.org?format=json').then(r => {
+  if (!r.ok) throw new Error('Không nhận diện được IP');
+  return r.json();
+}).then(d => fetch(pending, {
+  method: 'PUT', headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({ip: d.ip, timestamp: Date.now()})
+})).then(r => {
+  if (!r.ok) throw new Error('Không lưu được IP');
+  document.getElementById('message').textContent = 'Đã nhận diện IP. Quay lại Telegram để xác thực key.';
+  if (target) window.location.href = target;
+}).catch(e => { document.getElementById('message').textContent = e.message + '. Hãy thử lại.'; });
+</script>"""
+                    safe_target = to_url if urlparse(to_url).scheme in ("http", "https") else ""
+                    script = script.replace("PENDING_URL", json.dumps(firebase_pending).replace("<", "\\u003c"))
+                    script = script.replace("REDIRECT_URL", json.dumps(safe_target).replace("<", "\\u003c"))
+                    flow.response = http.Response.make(200, script.encode("utf-8"),
+                        {"Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store"})
+                    return
                 page = "Tunnel lam mat IP goc. Ket noi truc tiep toi VPS de xac thuc dung IP."
             else:
                 page = "Da ghi nhan IP: " + html.escape(client_ip) + ". Quay lai Telegram de xac thuc key."
@@ -437,7 +475,13 @@ class FFHotUpdateAddon:
             )
             return
 
-        # Public proxy must not relay arbitrary traffic for unauthorized clients.
+        protected_game = is_ff(host) and (is_main_fileinfo(path) or is_aim(path)
+                                          or "login" in host or "login" in low or "ping" in low)
+        if CONFIG.get("proxy_access_mode") == "game_only" and not protected_game:
+            self._replace(flow, "request")
+            return
+
+        # VPS strict mode checks all traffic; PC compatibility checks game only.
         is_auth, reason = self.check_ip_authorized(flow)
         if not is_auth:
             flow.metadata["access_denied"] = True
@@ -606,7 +650,7 @@ class FFHotUpdateAddon:
             ("connection_strategy", "lazy"),
             ("ssl_insecure", True),
             ("upstream_cert", False),
-            ("http2", True),
+            ("http2", str(CONFIG.get("proxy_http2", "true")).lower() not in ("false", "0")),
         )
         for k, v in pairs:
             try:

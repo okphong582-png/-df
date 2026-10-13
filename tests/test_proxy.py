@@ -118,3 +118,40 @@ def test_potatso_export(tmp_path):
 def test_environment_overrides_local_config(monkeypatch):
     monkeypatch.setenv("PUBLIC_PROXY_HOST", "203.0.113.12")
     assert load_config()["public_proxy_host"] == "203.0.113.12"
+
+
+def test_pc_compat_keeps_non_game_internet_working(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "proxy_access_mode", "game_only")
+    instance = addon()
+    request = flow("127.0.0.1", "https://example.org/")
+    instance.http_connect(request)
+    assert request.response is None
+    request = flow("127.0.0.1", "http://example.org/check")
+    asyncio.run(instance.request(request))
+    assert request.response is None
+
+
+def test_bore_compat_grants_loopback_only_with_active_session(monkeypatch):
+    monkeypatch.setitem(proxy1.CONFIG, "auth_mode", "tunnel_compat")
+    instance = addon()
+    assert instance.check_ip_authorized(flow("127.0.0.1"))[0]
+    assert not instance.check_ip_authorized(flow("203.0.113.11"))[0]
+    instance.auth_cache["203_0_113_10"]["expiresAt"] = 1
+    assert not instance.check_ip_authorized(flow("127.0.0.1"))[0]
+
+
+def test_pc_launcher_restores_mitm_bore_and_optional_bot(tmp_path, monkeypatch):
+    import run_local
+    monkeypatch.setattr(run_local, "BASE", tmp_path)
+    monkeypatch.setattr(run_local.socket, "gethostbyname", lambda host: "159.223.110.159")
+    (tmp_path / "bore.exe").write_bytes(b"")
+    from run_local import build_commands, child_environment
+    commands = build_commands(proxy_only=True)
+    assert "proxy" in commands and "bore" in commands and "bot" not in commands
+    assert "proxy1.py" in commands["proxy"]
+    assert "159.223.110.159" in commands["bore"]
+    assert commands["bore"][commands["bore"].index("--local-host") + 1] == "127.0.0.1"
+    assert "flow_detail=0" in commands["proxy"]
+    assert "bot" in build_commands()
+    assert "bore" not in build_commands(direct=True)
+    assert child_environment()["AUTH_MODE"] == "tunnel_compat"

@@ -6,6 +6,6 @@ if not exist ".venv\Scripts\python.exe" (
   pause
   exit /b 1
 )
-echo Dang chay proxy va bot. Ctrl+C de dung. Log hien ben duoi.
-".venv\Scripts\python.exe" run_local.py
+echo Mo MITMDump Server va Bore Public Tunnel. Khong can tu mo MITM lan nua.
+".venv\Scripts\python.exe" run_local.py --proxy-only --show-windows
 pause

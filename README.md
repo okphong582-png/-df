@@ -44,10 +44,14 @@ Healthcheck chỉ báo trạng thái, không tự sửa treo tiến trình hoặ
 Để cập nhật mã: `git pull --ff-only` rồi `docker compose up -d --build`.
 
 **159.223.110.159 trong bản cũ là địa chỉ tunnel đã được ghi cứng, không phải VPS
-đã được cấp cho bạn.** Tunnel vẫn cần PC chạy. Kết nối Bore làm proxy thấy
-127.0.0.1 nên không xác định được IP gốc. Bản này không cấp quyền cho mọi người
-chỉ vì có một IP đang hoạt động; cũng không tin `X-Forwarded-For` do khách gửi.
-Nên kết nối thẳng tới VPS và dùng cùng mạng khi lấy key / mở game.
+đã được cấp cho bạn.** Tunnel vẫn cần PC chạy. Kết nối Bore làm proxy thấy 127.0.0.1.
+**Chế độ PC qua launcher đã khôi phục cách cũ:** khi có ít nhất một quyền còn
+hạn trong Firebase, các kết nối qua Bore (peer loopback) được phép dùng phần
+game. Do Bore che IP gốc, chế độ này dùng quyền chung cho tunnel, không phân
+biệt từng người. Khi hết mọi quyền, các endpoint game được bảo vệ vẫn bị chặn.
+Lưu lượng Internet ngoài game đi qua như trước. Chế độ VPS/Docker vẫn kiểm tra
+đúng IP trên mọi kết nối; không tin header X-Forwarded-For do khách gửi.
+Nên kết nối thẳng tới VPS khi cần phân quyền riêng từng IP.
 
 ## iPhone / Potatso
 
@@ -81,7 +85,7 @@ hoặc chia sẻ `mitmproxy-ca.pem` (chứa private key).
 
 - Kiểm tra IP dùng snapshot trong RAM; một worker cập nhật mỗi 5 giây, không
   gọi Firebase cho từng request hoặc mỗi lần gặp IP lạ.
-- Bật HTTP/2, giữ kết nối upstream, giảm timeout thử CDN khác xuống 4 giây mỗi
+- Bật HTTP/2 ở chế độ VPS, giữ kết nối upstream, giảm timeout thử CDN khác xuống 4 giây mỗi
   máy; thử CDN dự phòng chạy ở worker để không chặn toàn bộ event loop.
 - TLS ngoài các miền game đi qua tunnel, không giải mã. Với Potatso chế độ
   toàn bộ proxy, lưu lượng đó **vẫn qua máy chủ**, không phải kết nối DIRECT.
@@ -109,9 +113,23 @@ Copy-Item config.example.json config.json   # Chỉ dùng nếu chưa có config
 .\.venv\Scripts\python.exe run_local.py
 ```
 
-`start all.bat` và `start_proxy.bat` gọi supervisor này. Ctrl+C dừng đúng các
-tiến trình con của lần chạy, không taskkill mọi Python trên máy. Không tự tạo
-tunnel Bore, không in thông báo giả là địa chỉ public đã online.
+`start_proxy.bat` tự mở **MITMDump Server + Bore Public Tunnel** ở hai cửa sổ.
+`start all.bat` mở thêm **Telegram Bot**. Chỉ chạy một trong hai launcher, không
+mở mitmdump thủ công lần nữa. Các dịch vụ tự khởi động lại khi thoát; Ctrl+C
+ở cửa sổ launcher dừng đúng các tiến trình con của lần chạy.
+Bore phải báo kết nối/listening thành công thì IP/cổng public mới dùng được.
+Log nằm trong `logs/`; không commit log lên GitHub. `bore.exe` cần có sẵn trong
+thư mục khi dùng tunnel. Launcher ưu tiên mitmdump đã cài trên máy và giữ nguyên
+CA ở thư mục cấu hình người dùng, không thay CA đang cài trên iPhone.
+Để chạy trực tiếp LAN/VPS không có Bore: `python run_local.py --direct`.
+Chế độ PC khôi phục HTTP/1.1 như bản cũ; HTTP/2 vẫn bật trong chế độ VPS.
+Launcher không in từng kết nối/request: mitmdump chỉ hiện lỗi, Bore chỉ hiện
+cảnh báo/lỗi; lỗi socket 10053 lặp lại được giới hạn hiển thị mỗi 30 giây.
+Bore dùng IPv4 tới máy chủ và `--local-host 127.0.0.1` tới mitmdump để tránh
+nhầm localhost sang IPv6. Bot bỏ qua hàng đợi cũ khi khởi động; nếu đã gửi key
+trong lúc bot tắt, hãy gửi lại sau khi bot bật.
+Ẩn log không làm tăng băng thông tunnel. Trên 4G/Wi-Fi khác, đường truyền vẫn
+đi vòng qua Bore và PC; cần đo trên iPhone để đánh giá tốc độ game.
 Muốn thử trên LAN, cấp quyền IP LAN thực tế của iPhone; public IP lấy ngoài
 Internet không khớp IP LAN mà proxy nhìn thấy.
 

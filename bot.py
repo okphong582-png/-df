@@ -572,5 +572,7 @@ if __name__ == "__main__":
     if not BOT_TOKEN or "DIEN_BOT_TOKEN" in BOT_TOKEN or not FIREBASE_URL or not ADMIN_ID:
         raise SystemExit("Thieu BOT_TOKEN, ADMIN_ID hoac FIREBASE_URL; xem .env.example")
     threading.Thread(target=run_ip_server, daemon=True).start()
-    bot.infinity_polling(timeout=20, long_polling_timeout=20)
+    # Old inline-button callbacks expire while the PC is offline. Do not replay
+    # queued clicks or old key-generation requests after restarting the bot.
+    bot.infinity_polling(skip_pending=True, timeout=20, long_polling_timeout=20)
     raise SystemExit("Bot polling da dung; khoi dong lai dich vu")
