@@ -3,286 +3,368 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cơ Khí Trung Nhất – Hút mùi, chuyền in, ống gió</title>
 <meta name="description" content="Cơ Khí Trung Nhất: hệ thống hút mùi, chuyền in, ống gió và phụ kiện, thùng than hoạt tính, lam gió, giảm âm, khóa gió, cùm bích la, chụp khói, sàn thao tác lấy mẫu, cầu hút nhiệt. Hotline 0909 782 916.">
-<title>Cơ Khí Trung Nhất | Hút mùi, chuyền in & ống gió</title>
-<meta name="theme-color" content="#145c37">
-<meta property="og:title" content="Cơ Khí Trung Nhất">
-<meta property="og:description" content="Hệ thống hút mùi, chuyền in, ống gió và phụ kiện cho nhà xưởng. Liên hệ 0909 782 916.">
-<meta property="og:type" content="website">
-<meta property="og:locale" content="vi_VN">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0a1a30">
+<link rel="icon" href="media/favicon.png">
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap">
 <style>
-/* Workshop catalogue: dark-green hero over a real site photo, white sections, photo cards with titles set on the image. Light-only by request. */
-:root{color-scheme:light;--bg:#fff;--soft:#f3f5f3;--ink:#121614;--muted:#5f6862;--line:#e2e6e3;--green:#166534;--green-d:#0e4a26;--lime:#86efac;--zalo:#0068ff;--r:10px;--f:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+/* Industrial catalogue: navy from the Trung Nhất logo + amber accent, warm off-white sections, rounded photo cards. Light-only. */
+:root{color-scheme:light;
+  --bg:#ffffff;--soft:#f4f6f9;--ink:#0e1624;--muted:#5a6473;--line:#e2e7ee;
+  --brand:#1a4a80;--brand-d:#0a1a30;--brand-m:#123a66;--tint2:#cfe0f5;--amber:#f59e0b;--amber-l:#fde68a;--zalo:#0068ff;
+  --r:16px;--r-s:12px;--sh:0 1px 2px rgba(14,22,36,.06),0 10px 30px -12px rgba(14,22,36,.22);
+  --f:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:70px}
-body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.6;overflow-x:hidden}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:#fff}
 a{color:inherit;text-decoration:none}
-h1,h2{margin:0;line-height:1.15;text-wrap:balance}
+h1,h2,h3{margin:0;line-height:1.12;text-wrap:balance}
 p{margin:0}
 figure{margin:0}
-:focus-visible{outline:3px solid #22c55e;outline-offset:2px}
-.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+
+/* top strip */
+.top{background:var(--brand-d);color:#b4c2d4;font-size:13px}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;height:38px}
+.top span{display:flex;align-items:center;gap:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.top svg{width:14px;height:14px;flex:none;color:var(--amber)}
+.top a{color:#fff;font-weight:600}
 
 /* header */
-.hd{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.hd .wrap{display:flex;align-items:center;gap:24px;height:64px}
-.brand{display:flex;align-items:center;gap:10px;flex:none}
-.brand i{width:36px;height:36px;border-radius:8px;background:var(--green);color:#fff;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:14px}
-.brand b{font-size:16px;font-weight:800;letter-spacing:.01em}
+.hd{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.6) blur(14px);-webkit-backdrop-filter:saturate(1.6) blur(14px);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
+.hd.sc{border-bottom-color:var(--line);box-shadow:0 6px 24px -18px rgba(0,0,0,.4)}
+.hd .wrap{display:flex;align-items:center;gap:20px;height:80px}
+.brand{display:flex;align-items:center;gap:12px;flex:none}
+.brand>span:not(.logo){display:flex;flex-direction:column;line-height:1.25;padding-left:14px;border-left:1px solid var(--line)}
+.brand small{font-size:10.5px;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.brand b{font-size:16px;font-weight:800;letter-spacing:.02em;color:var(--brand)}
 .nav{display:flex;gap:2px;margin-left:auto}
-.nav a{padding:8px 12px;border-radius:6px;font-size:14.5px;font-weight:500;color:var(--muted);transition:color .2s,background .2s}
+.nav a{white-space:nowrap;padding:8px 12px;border-radius:999px;font-size:14.5px;font-weight:600;color:var(--muted);transition:color .2s,background .2s}
 .nav a:hover{color:var(--ink);background:var(--soft)}
-.nav a.on{color:var(--green);background:#eaf4ee}
+.nav a.on{color:var(--brand);background:#e9f0f9}
 .hd-c{display:flex;gap:8px;flex:none}
-.pill{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;font-weight:700;font-size:14.5px;color:#fff;transition:filter .2s,transform .15s}
-.pill:hover{filter:brightness(1.08)}.pill:active{transform:scale(.97)}
+.pill{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;font-weight:700;font-size:14.5px;color:#fff;transition:filter .2s,transform .15s}
+.pill:hover{filter:brightness(1.1)}.pill:active{transform:scale(.97)}
 .pill svg{width:16px;height:16px}
-.pill.g{background:var(--green)}.pill.z{background:var(--zalo)}
+.pill.g{background:var(--brand)}.pill.z{background:var(--zalo)}
+
+/* logo + glass sweep */
+.logo{position:relative;display:block;line-height:0;--m:url("data:image/png;base64,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")}
+.logo img{display:block;width:100%;height:auto;animation:lgIn 1.5s cubic-bezier(.7,0,.2,1) .15s both}
+.logo::before{content:"";position:absolute;z-index:1;top:-12%;bottom:-12%;left:-22%;width:22%;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.85) 50%,rgba(255,255,255,0));-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);transform:skewX(-16deg);animation:lgBar 1.5s cubic-bezier(.7,0,.2,1) .15s both}
+.logo::after{content:"";position:absolute;inset:0;pointer-events:none;-webkit-mask:var(--m) center/100% 100% no-repeat;mask:var(--m) center/100% 100% no-repeat;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.95) 50%,transparent 62%) 100% 0/300% 100% no-repeat;animation:lgShine 5s ease-in-out 1.7s infinite}
+.logo.w::after{background-image:linear-gradient(105deg,transparent 38%,rgba(255,200,90,.95) 50%,transparent 62%)}
+@keyframes lgIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes lgBar{0%{left:-22%;opacity:1}88%{left:100%;opacity:1}100%{left:100%;opacity:0}}
+@keyframes lgShine{0%{background-position:100% 0}40%,100%{background-position:0 0}}
+.brand .logo{width:112px}
+
+/* glass card */
+.glass{position:relative;overflow:hidden;isolation:isolate;border-radius:24px;background:linear-gradient(140deg,rgba(255,255,255,.94),rgba(255,255,255,.78));-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border:1px solid rgba(255,255,255,.7);box-shadow:0 40px 80px -30px rgba(0,0,0,.65),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(26,74,128,.12)}
+.glass::after{content:"";position:absolute;z-index:2;top:-60%;bottom:-60%;left:-70%;width:45%;pointer-events:none;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.6) 50%,rgba(255,255,255,0));transform:rotate(18deg);animation:gSweep 6.5s cubic-bezier(.6,0,.3,1) 1s infinite}
+@keyframes gSweep{0%{left:-70%}32%,100%{left:140%}}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.8fr);gap:56px;align-items:center}
+.hcard{padding:34px 32px 26px;color:var(--ink);animation:up 1s cubic-bezier(.2,.8,.2,1) .3s both}
+.hcard .logo{width:100%;max-width:340px;margin:0 auto 26px}
+.hcard dl{margin:0;display:grid;gap:2px;border-top:1px solid var(--line);padding-top:18px}
+.hcard dt{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hcard dd{margin:0 0 10px;font-weight:700}
+.hcard dd a{font-size:26px;font-weight:900;color:var(--brand);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.ft .logo{width:200px}
 
 /* hero */
-.hero{position:relative;color:#fff;overflow:hidden;background:#0d1f14}
-.hero-bg{position:absolute;inset:0}
-.hero-bg img{width:100%;height:100%;object-fit:cover;filter:saturate(.9);animation:kb 24s ease-in-out infinite alternate}
-@keyframes kb{from{transform:scale(1.04)}to{transform:scale(1.14) translate(-2%,-1%)}}
-.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,26,15,.92) 0%,rgba(8,26,15,.72) 45%,rgba(8,26,15,.25) 100%)}
-.hero .wrap{position:relative;z-index:1;padding-block:clamp(72px,10vw,128px) clamp(64px,9vw,112px)}
-.hero .co{display:inline-block;font-size:13px;font-weight:600;color:var(--lime);letter-spacing:.04em;text-transform:uppercase}
-.hero h1{font-size:clamp(34px,5vw,60px);font-weight:800;max-width:18ch;margin:14px 0 16px;letter-spacing:-.015em}
-.hero .ad{color:#cfdcd3;font-size:15.5px;display:flex;gap:8px;align-items:flex-start;max-width:60ch}
-.hero .ad svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--lime)}
-.hero .bt{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:52px;padding:0 24px;border-radius:999px;font-weight:700;font-size:16px;transition:filter .2s,transform .15s}
-.btn:hover{filter:brightness(1.08)}.btn:active{transform:scale(.97)}
+.hero{position:relative;color:#fff;overflow:hidden;background:var(--brand-d);isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2}
+.hero-bg img{width:100%;height:100%;object-fit:cover;animation:kb 26s ease-in-out infinite alternate}
+@keyframes kb{from{transform:scale(1.03)}to{transform:scale(1.12) translate(-2%,-1%)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(100deg,rgba(7,18,36,.94) 0%,rgba(7,18,36,.78) 42%,rgba(7,18,36,.2) 100%),linear-gradient(0deg,rgba(7,18,36,.7),transparent 40%)}
+.hero .wrap{padding-block:clamp(80px,10vw,136px) clamp(132px,13vw,176px)}
+.eyb{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.hero .eyb{color:var(--amber-l);background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.35);padding:6px 12px;border-radius:999px}
+.hero .eyb::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(245,158,11,.25)}
+.hero h1{font-size:clamp(36px,4.8vw,62px);font-weight:900;max-width:16ch;margin:20px 0 18px;letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--amber)}
+.hero .lead{color:#d3dceb;font-size:clamp(16px,1.4vw,18px);max-width:52ch}
+.hero .bt{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:54px;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;transition:filter .2s,transform .15s}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px)}.btn:active{transform:scale(.97)}
 .btn svg{width:18px;height:18px}
-.btn.g{background:#fff;color:var(--green)}.btn.z{background:var(--zalo);color:#fff}
+.btn.a{background:var(--amber);color:#1c1405;box-shadow:0 12px 28px -12px rgba(245,158,11,.8)}
+.btn.g{background:var(--brand);color:#fff}
+.btn.z{background:var(--zalo);color:#fff}
+.addr{display:flex;gap:10px;align-items:flex-start;margin-top:28px;color:#c9d4e3;font-size:15px;max-width:56ch}
+.addr svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--amber)}
 .hero .an{animation:up .9s cubic-bezier(.2,.8,.2,1) both}
-.hero .an:nth-child(2){animation-delay:.08s}.hero .an:nth-child(3){animation-delay:.16s}.hero .an:nth-child(4){animation-delay:.24s}
-@keyframes up{from{opacity:0;transform:translateY(20px)}}
+.hero .an:nth-child(2){animation-delay:.08s}.hero .an:nth-child(3){animation-delay:.16s}.hero .an:nth-child(4){animation-delay:.24s}.hero .an:nth-child(5){animation-delay:.32s}
+@keyframes up{from{opacity:0;transform:translateY(22px)}}
 
 /* category menu */
-.menu{position:relative;z-index:2;margin-top:-44px}
-.menu .wrap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
-.mi{display:flex;flex-direction:column;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:0 10px 30px -18px rgba(0,0,0,.45);transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s}
-.mi:hover{transform:translateY(-4px);box-shadow:0 16px 34px -18px rgba(0,0,0,.5)}
-.mi-im{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--soft)}
-.mi-im img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.menu{position:relative;z-index:2;margin-top:-88px}
+.menu .wrap{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.mi{display:flex;flex-direction:column;background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);padding:6px;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s}
+.mi:hover{transform:translateY(-6px);box-shadow:0 22px 40px -20px rgba(14,22,36,.45)}
+.mi-im{display:block;aspect-ratio:4/3;overflow:hidden;border-radius:11px;background:var(--soft)}
+.mi-im img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .mi:hover .mi-im img{transform:scale(1.08)}
-.mi b{padding:10px 12px;font-size:14.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
-.mi b::after{content:"→";color:var(--green);transition:transform .25s}
-.mi:hover b::after{transform:translateX(3px)}
+.mi b{padding:10px 6px 6px 8px;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.mi b::after{content:"";flex:none;width:26px;height:26px;border-radius:50%;background:var(--soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a4a80' stroke-width='2.6'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/13px no-repeat;transition:transform .25s,background-color .25s}
+.mi:hover b::after{transform:translateX(3px);background-color:var(--tint2)}
 
 /* sections */
-.sec{padding-block:clamp(56px,7vw,88px)}
+.sec{padding-block:clamp(64px,8vw,104px)}
 .soft{background:var(--soft)}
-.hdg{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;scroll-margin-top:80px}
-.hdg span{font-size:13px;font-weight:700;color:var(--green);letter-spacing:.06em;font-variant-numeric:tabular-nums}
-.hdg h2{font-size:clamp(24px,2.8vw,34px);font-weight:800;letter-spacing:-.01em}
-.split{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.hdg{margin-bottom:32px;scroll-margin-top:96px;max-width:720px}
+.hdg .eyb{color:var(--brand)}
+.hdg .eyb i{font-style:normal;color:var(--amber);font-variant-numeric:tabular-nums}
+.hdg h2{font-size:clamp(28px,3.4vw,42px);font-weight:800;letter-spacing:-.02em;margin-top:10px}
+.hdg p{color:var(--muted);margin-top:12px;font-size:16.5px;max-width:60ch}
+.split{display:flex;justify-content:space-between;align-items:flex-end;gap:16px 32px;flex-wrap:wrap;margin-bottom:32px}
 .split .hdg{margin-bottom:0}
-.ask{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--green);font-size:15px}
+.ask{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--brand);font-size:15px;padding:10px 18px;border-radius:999px;background:#e9f0f9;transition:background .2s}
+.ask:hover{background:var(--tint2)}
 .ask svg{width:16px;height:16px;transition:transform .25s}.ask:hover svg{transform:translateX(4px)}
-.split+*{margin-top:24px}
 
 /* photos */
-button.lb{all:unset;box-sizing:border-box;display:block;position:relative;overflow:hidden;background:#dfe4e0;cursor:zoom-in;min-width:0;min-height:0;width:100%;height:100%}
+button.lb{all:unset;box-sizing:border-box;display:block;position:relative;overflow:hidden;background:#dde3ea;cursor:zoom-in;min-width:0;min-height:0;width:100%;height:100%}
 button.lb.hid{display:none}
-button.lb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+button.lb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+button.lb::after{content:"";position:absolute;inset:0;background:rgba(7,18,36,0) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4M11 8v6M8 11h6'/%3E%3C/svg%3E") center/0 no-repeat;transition:background-color .3s,background-size .3s}
+button.lb:hover::after{background-color:rgba(7,18,36,.28);background-size:34px}
 button.lb:hover img{transform:scale(1.06)}
-button.lb:focus-visible{outline:3px solid #22c55e;outline-offset:-3px}
+button.lb:focus-visible{outline:3px solid var(--amber);outline-offset:-3px}
 
 /* hút mùi mosaic */
-.mos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,clamp(110px,12vw,160px));gap:8px;border-radius:var(--r);overflow:hidden}
+.mos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,clamp(130px,14vw,190px));gap:12px}
+.mos .lb{border-radius:var(--r-s)}
 .mos .lb:nth-child(1){grid-column:span 2;grid-row:span 2}
 .mos .lb:nth-child(6),.mos .lb:nth-child(7){grid-column:span 2}
 
 /* chuyền in */
-.ci{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
-.ci .hdg{margin-bottom:14px}
-.ci p{color:var(--muted);max-width:40ch}
-.ci .ask{margin-top:20px}
-.vids{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.vids video{width:100%;aspect-ratio:9/14;object-fit:cover;display:block;background:#111;border-radius:var(--r)}
+.ci{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.ci .hdg{margin-bottom:0}
+.ci ul{list-style:none;padding:0;margin:24px 0 28px;display:grid;gap:12px}
+.ci li{display:flex;gap:12px;align-items:center;font-weight:600}
+.ci li svg{width:24px;height:24px;flex:none;color:var(--brand);background:#dce8f6;border-radius:50%;padding:5px}
+.vids{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding-bottom:32px}
+.vids video{width:100%;aspect-ratio:9/14;object-fit:cover;display:block;background:#111;border-radius:var(--r);box-shadow:var(--sh)}
+.vids video:nth-child(2){transform:translateY(32px)}
 
 /* cover cards */
-.cv{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;max-width:100%;background:#dfe4e0}
+.cv{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;max-width:100%;background:#dde3ea;box-shadow:var(--sh)}
 .cv.tall{aspect-ratio:4/5}
-.cv figcaption{position:absolute;left:0;right:0;bottom:0;padding:40px 14px 12px;background:linear-gradient(transparent,rgba(0,0,0,.72));color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;pointer-events:none}
-.cv b{font-size:16px;font-weight:700;line-height:1.3}
-.cv .n{font-size:12px;font-weight:600;background:rgba(255,255,255,.18);backdrop-filter:blur(4px);padding:3px 8px;border-radius:999px;flex:none}
-.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.cv figcaption{position:absolute;left:0;right:0;bottom:0;padding:56px 16px 14px;background:linear-gradient(transparent,rgba(4,12,26,.82));color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:8px;pointer-events:none}
+.cv b{font-size:17px;font-weight:700;line-height:1.3}
+.cv .n{font-size:12px;font-weight:700;background:rgba(255,255,255,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:4px 9px;border-radius:999px;flex:none}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
 
 /* phụ kiện */
-.pks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px}
-.pk{background:#fff;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);transition:border-color .25s,transform .3s}
-.pk:hover{border-color:var(--green);transform:translateY(-3px)}
+.pks{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:14px}
+.pk{background:#fff;border-radius:var(--r-s);overflow:hidden;border:1px solid var(--line);transition:border-color .25s,transform .3s,box-shadow .3s}
+.pk:hover{border-color:#93b7e3;transform:translateY(-4px);box-shadow:var(--sh)}
 .pk .lb{aspect-ratio:1;height:auto;background:#fff}
-.pk img{object-fit:contain!important;padding:10px}
-.pk figcaption{padding:8px 10px 10px;font-size:13.5px;font-weight:600;line-height:1.3;text-align:center}
+.pk .lb::after{display:none}
+.pk img{object-fit:contain!important;padding:12px}
+.pk figcaption{padding:4px 10px 12px;font-size:13.5px;font-weight:600;line-height:1.3;text-align:center}
 
 /* projects */
-.proj{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;border-radius:var(--r);overflow:hidden}
-.proj .lb{aspect-ratio:1;height:auto}
+.proj{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:10px}
+.proj .lb{aspect-ratio:1;height:auto;border-radius:10px}
 
 /* contact */
-.cta{background:var(--green);color:#fff}
-.cta .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;padding-block:clamp(56px,7vw,80px)}
-.cta .co{font-size:13px;font-weight:600;color:var(--lime);letter-spacing:.04em;text-transform:uppercase}
-.cta .ph{display:block;font-size:clamp(34px,5vw,56px);font-weight:800;letter-spacing:-.01em;margin:8px 0 14px;font-variant-numeric:tabular-nums}
-.cta .ad{color:#d3e6da}
-.cta .bt{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
-.map{display:block;border-radius:var(--r);overflow:hidden;background:#fff;color:var(--ink);transition:transform .3s}
-.map:hover{transform:translateY(-3px)}
+.cta{position:relative;background:radial-gradient(1200px 500px at 85% 0%,rgba(245,158,11,.16),transparent 60%),linear-gradient(135deg,#14365f 0%,var(--brand-d) 100%);color:#fff;overflow:hidden}
+.cta::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:40px 40px;-webkit-mask-image:linear-gradient(90deg,#000,transparent 70%);mask-image:linear-gradient(90deg,#000,transparent 70%)}
+.cta .wrap{position:relative;display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;padding-block:clamp(64px,8vw,104px)}
+.cta .eyb{color:var(--amber-l)}
+.cta h2{font-size:clamp(26px,3vw,36px);font-weight:800;margin:12px 0 4px;letter-spacing:-.015em}
+.cta .ph{display:inline-block;font-size:clamp(40px,5.6vw,64px);font-weight:900;letter-spacing:-.02em;color:var(--amber);font-variant-numeric:tabular-nums;margin:2px 0 18px}
+.cta .ad{color:#c9d6e6;display:grid;gap:8px}
+.cta .ad span{display:flex;gap:10px;align-items:flex-start}
+.cta .ad svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--amber)}
+.cta .bt{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.map{display:block;border-radius:var(--r);overflow:hidden;background:#fff;color:var(--ink);transition:transform .3s;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.map:hover{transform:translateY(-4px)}
 .map svg{display:block;width:100%;height:auto;aspect-ratio:2/1;max-width:100%}
 .map span svg{width:20px;height:20px}
-.map span{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;font-weight:700;color:var(--green)}
+.map span{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;font-weight:700;color:var(--brand)}
 .pin{transform-box:fill-box;transform-origin:50% 100%;animation:pin 2.2s ease-in-out infinite}
 @keyframes pin{50%{transform:translateY(-6px)}}
-footer{background:#0d2817;color:#9fb8a8;font-size:13.5px}
-footer .wrap{padding-block:20px calc(20px + env(safe-area-inset-bottom,0px))}
+
+footer{background:#06111f;color:#8b9bb0;font-size:14px}
+.ft{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-block:56px 36px}
+.ft .brand b{color:#fff}.ft .brand small{color:#8b9bb0}
+.ft p{margin-top:16px;max-width:42ch}
+.ft h4{margin:0 0 14px;color:#fff;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.ft ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ft a:hover{color:#fff}
+.cp{border-top:1px solid rgba(255,255,255,.08);padding-block:18px calc(18px + env(safe-area-inset-bottom,0px));font-size:13px}
 
 /* reveal */
 .rv{transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
-.rv.pre{opacity:0;transform:translateY(24px)}
+.rv.pre{opacity:0;transform:translateY(28px)}
 
 .bar{display:none}
 
 /* lightbox */
-.lbx{position:fixed;inset:0;z-index:100;background:#0a0c0b;display:grid;grid-template-rows:auto 1fr auto;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.lbx{position:fixed;inset:0;z-index:100;background:rgba(5,9,16,.97);display:grid;grid-template-rows:auto 1fr auto;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
 .lbx.open{opacity:1;visibility:visible}
-.lbx-top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;color:#cfd5d1;font-size:14px}
-.lbx-st{position:relative;min-height:0;display:grid;place-items:center;padding:0 64px}
-.lbx-st img{width:100%;height:100%;max-height:80vh;object-fit:contain;transition:opacity .2s}
+.lbx-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;color:#cfd5d1;font-size:14px;font-variant-numeric:tabular-nums}
+.lbx-st{position:relative;min-height:0;display:grid;place-items:center;padding:0 72px}
+.lbx-st img{width:100%;height:100%;max-height:82vh;object-fit:contain;transition:opacity .2s}
 .lbx-st img.sw{opacity:0}
-.lbx button{border:0;background:rgba(255,255,255,.1);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
-.lbx button:hover{background:rgba(255,255,255,.2)}
+.lbx button{border:0;background:rgba(255,255,255,.1);color:#fff;width:46px;height:46px;border-radius:50%;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+.lbx button:hover{background:rgba(255,255,255,.22)}
 .lbx button svg{width:22px;height:22px}
-.lbx .pv,.lbx .nx{position:absolute;top:50%;margin-top:-22px}.lbx .pv{left:10px}.lbx .nx{right:10px}
-.lbx-cap{color:#fff;text-align:center;padding:12px 16px 18px;font-weight:600}
+.lbx .pv,.lbx .nx{position:absolute;top:50%;margin-top:-23px}.lbx .pv{left:12px}.lbx .nx{right:12px}
+.lbx-cap{color:#fff;text-align:center;padding:12px 16px 20px;font-weight:600}
 
-@media (max-width:1060px){
+@media (max-width:1240px){.nav{display:none}.hd-c{margin-left:auto}}
+@media (max-width:1100px){
   .nav{display:none}
   .hd-c{margin-left:auto}
   .menu .wrap{grid-template-columns:repeat(3,minmax(0,1fr))}
   .g4{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .pks{grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+  .pks{grid-template-columns:repeat(5,minmax(0,1fr))}
   .proj{grid-template-columns:repeat(6,minmax(0,1fr))}
-  .ci,.cta .wrap{grid-template-columns:1fr}
+  .ci,.cta .wrap,.hero .wrap{grid-template-columns:1fr}
+  .hcard{display:none}
+  .ci{gap:36px}
+  .ft{grid-template-columns:1fr 1fr}.ft>div:first-child{grid-column:1/-1}
 }
 @media (max-width:620px){
-  html{scroll-padding-top:62px}
-  body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
-  .hd .wrap{height:56px}
+  html{scroll-padding-top:66px}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom,0px))}
+  .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .top{display:none}
+  .hd .wrap{height:60px}
   .hd-c{display:none}
-  .brand b{font-size:15px}
-  .hero::after{background:linear-gradient(180deg,rgba(8,26,15,.55) 0%,rgba(8,26,15,.9) 70%)}
-  .hero .wrap{padding-block:64px 76px}
-  .hero h1{font-size:32px}
+  .brand .logo{width:74px}
+  .brand>span:not(.logo){padding-left:10px}
+  .brand b{font-size:14px}
+  .brand small{font-size:9.5px}
+  .hero::before{background:linear-gradient(180deg,rgba(7,18,36,.5) 0%,rgba(7,18,36,.92) 65%)}
+  .hero .wrap{padding-block:64px 124px}
+  .hero h1{font-size:34px}
   .hero .bt{display:none}
-  .menu{margin-top:-36px}
-  .menu .wrap{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-  .mi b{font-size:13px;padding:8px 9px}
+  .addr{font-size:14px;margin-top:20px}
+  .menu{margin-top:-84px}
+  .menu .wrap{gap:8px}
+  .mi{padding:4px;border-radius:12px}
+  .mi-im{border-radius:9px}
+  .mi b{font-size:13px;padding:7px 4px 4px}
   .mi b::after{display:none}
-  .sec{padding-block:48px}
-  .hdg{margin-bottom:18px}
-  .mos{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:96px;gap:4px}
+  .sec{padding-block:56px}
+  .hdg,.split{margin-bottom:22px}
+  .hdg p{font-size:15.5px}
+  .mos{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:100px;gap:6px}
+  .mos .lb{border-radius:8px}
   .mos .lb:nth-child(1){grid-column:1/-1;grid-row:span 2}
   .mos .lb:nth-child(6),.mos .lb:nth-child(7){grid-column:auto}
-  .ci{gap:20px}
-  .vids{gap:6px}
-  .g4{gap:8px}
+  .vids{gap:8px;padding-bottom:0}
+  .vids video:nth-child(2){transform:none}
+  .g4{gap:10px}
+  .cv{border-radius:12px}
   .cv b{font-size:14px}
-  .cv figcaption{padding:30px 10px 9px}
-  .pks{grid-template-columns:none;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:31%;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:2px max(16px,env(safe-area-inset-left,0px)) 6px;scroll-padding-inline:max(16px,env(safe-area-inset-left,0px))}
+  .cv figcaption{padding:36px 10px 10px}
+  .pks{grid-template-columns:none;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:34%;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:2px max(16px,env(safe-area-inset-left,0px)) 8px;scroll-padding-inline:max(16px,env(safe-area-inset-left,0px))}
   .pks::-webkit-scrollbar{display:none}
   .pk{scroll-snap-align:start}
   .pk:hover{transform:none}
-  .pk figcaption{font-size:12.5px;padding:6px 6px 8px}
-  .proj{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
+  .pk figcaption{font-size:12.5px;padding:2px 6px 10px}
+  .proj{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+  .proj .lb{border-radius:6px}
   .cta .bt{display:none}
-  .bar{display:grid;grid-template-columns:1.6fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:70;background:#fff;border-top:1px solid var(--line);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));box-shadow:0 -8px 20px -14px rgba(0,0,0,.35)}
-  .bar .btn{height:48px;font-size:16px}
-  .bar .btn.g{background:var(--green);color:#fff}
+  .ft{grid-template-columns:1fr;gap:28px;padding-block:44px 28px}
+  .bar{display:grid;grid-template-columns:1.6fr 1fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:70;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));box-shadow:0 -8px 20px -14px rgba(0,0,0,.35)}
+  .bar .btn{height:50px;font-size:16px}
   .lbx-st{padding:0 6px}
-  .lbx .pv,.lbx .nx{top:auto;bottom:-58px}.lbx .pv{left:14px}.lbx .nx{right:14px}
+  .lbx .pv,.lbx .nx{top:auto;bottom:-60px}.lbx .pv{left:14px}.lbx .nx{right:14px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.rv.pre{opacity:1;transform:none}}
 </style>
-<link rel="stylesheet" href="styles-polish.css">
 </head>
 <body>
-<a class="skip-link" href="#top">Đến nội dung chính</a>
 
-<header class="hd"><div class="wrap">
-  <a class="brand" href="#top"><i>TN</i><b>CƠ KHÍ TRUNG NHẤT</b></a>
-  <button class="nav-toggle" type="button" aria-label="Mở danh mục" aria-expanded="false" aria-controls="main-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg><span>Danh mục</span></button>
-  <nav id="main-nav" class="nav" aria-label="Danh mục"><a href="#hut-mui">Hút mùi</a><a href="#chuyen-in">Chuyền in</a><a href="#ong-gio">Ống gió</a><a href="#phu-kien">Phụ kiện</a><a href="#thiet-bi">Thiết bị</a><a href="#cong-trinh">Công trình</a><a href="#lien-he">Liên hệ</a></nav>
+<div class="top"><div class="wrap"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh</span><span>Hotline:&nbsp;<a href="tel:0909782916">0909 782 916</a></span></div></div>
+<header class="hd" id="hd"><div class="wrap">
+  <a class="brand" href="#top" aria-label="Cơ Khí Trung Nhất – về đầu trang"><span class="logo"><img src="media/logo.png" alt="Logo Trung Nhất" width="900" height="545"></span><span><small>Công ty TNHH SX TM</small><b>CƠ KHÍ TRUNG NHẤT</b></span></a>
+  <nav class="nav" aria-label="Danh mục"><a href="#hut-mui">Hút mùi</a><a href="#chuyen-in">Chuyền in</a><a href="#ong-gio">Ống gió</a><a href="#phu-kien">Phụ kiện</a><a href="#thiet-bi">Thiết bị</a><a href="#cong-trinh">Công trình</a><a href="#lien-he">Liên hệ</a></nav>
   <div class="hd-c"><a class="pill g" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>0909 782 916</a><a class="pill z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Zalo</a></div>
 </div></header>
 
 <main id="top">
 <section class="hero">
-  <div class="hero-bg"><img src="media/hm-n1.jpg" alt="" fetchpriority="high" width="1200" height="800"></div>
+  <div class="hero-bg"><img src="media/hm-n1.jpg" alt=""></div>
   <div class="wrap">
-    <span class="co an">Công ty TNHH SX TM Cơ Khí Trung Nhất</span>
-    <h1 class="an">Hút mùi, chuyền in<br>và <em>ống gió</em><br>cho nhà xưởng.</h1>
-    <p class="hero-intro an">Hệ thống và phụ kiện cơ khí, gia công theo mặt bằng thực tế của từng xưởng.</p>
-    <p class="ad an"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh</p>
-    <div class="bt an"><a class="btn explore" href="#hut-mui">Khám phá sản phẩm <span aria-hidden="true">↗</span></a><a class="btn g" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>0909 782 916</a><a class="btn z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Nhắn Zalo</a></div>
+  <div>
+    <span class="eyb an">Công ty TNHH SX TM Cơ Khí Trung Nhất</span>
+    <h1 class="an">Hút mùi, chuyền in và <em>ống gió</em> cho nhà xưởng</h1>
+    <p class="lead an">Ống gió và phụ kiện, thùng than hoạt tính, lam gió, giảm âm, khóa gió, cùm bích la, chụp khói, sàn thao tác lấy mẫu, cầu hút nhiệt.</p>
+    <div class="bt an"><a class="btn a" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Gọi 0909 782 916</a><a class="btn z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Nhắn Zalo báo giá</a></div>
+    <p class="addr an"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh</p>
+  </div>
+  <aside class="glass hcard" aria-label="Thông tin liên hệ"><span class="logo"><img src="media/logo.png" alt="Logo Trung Nhất" width="900" height="545"></span><dl><dt>Hotline / Zalo</dt><dd><a href="tel:0909782916">0909 782 916</a></dd><dt>Mã số thuế</dt><dd>0317185014</dd></dl></aside>
   </div>
 </section>
 <nav class="menu" aria-label="Danh mục sản phẩm"><div class="wrap"><a href="#hut-mui" class="mi"><span class="mi-im"><img src="media/hm-n1.jpg" alt="" loading="lazy"></span><b>Hút mùi</b></a><a href="#chuyen-in" class="mi"><span class="mi-im"><img src="media/chuyen-in-1.jpg" alt="" loading="lazy"></span><b>Chuyền in</b></a><a href="#ong-gio" class="mi"><span class="mi-im"><img src="media/og-tron-dong.jpg" alt="" loading="lazy"></span><b>Ống gió</b></a><a href="#phu-kien" class="mi"><span class="mi-im"><img src="media/pk/co90-tron.jpg" alt="" loading="lazy"></span><b>Phụ kiện</b></a><a href="#thiet-bi" class="mi"><span class="mi-im"><img src="media/than-2.jpg" alt="" loading="lazy"></span><b>Thiết bị</b></a><a href="#cong-trinh" class="mi"><span class="mi-im"><img src="media/ct/ct-01.jpg" alt="" loading="lazy"></span><b>Công trình</b></a></div></nav>
 
 <section class="sec"><div class="wrap">
-  <div class="split"><div class="hdg rv" id="hut-mui"><span>01</span><h2>Hệ thống hút mùi</h2></div><a class="ask rv" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Báo giá qua Zalo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  <div class="split"><div class="hdg rv" id="hut-mui"><span class="eyb"><i>01</i> Sản phẩm</span><h2>Hệ thống hút mùi</h2></div><a class="ask rv" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Báo giá qua Zalo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   <div class="mos rv"><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm-n1.jpg" alt="Hệ thống hút mùi" loading="lazy"></button><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm1.jpg" alt="Hệ thống hút mùi" loading="lazy"></button><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm6.jpg" alt="Hệ thống hút mùi" loading="lazy"></button><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm3.jpg" alt="Hệ thống hút mùi" loading="lazy"></button><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm5.jpg" alt="Hệ thống hút mùi" loading="lazy"></button><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm-n2.jpg" alt="Hệ thống hút mùi" loading="lazy"></button><button type="button" class="lb" data-lb="hm" data-cap="Hệ thống hút mùi"><img src="media/hm-n3.jpg" alt="Hệ thống hút mùi" loading="lazy"></button></div>
 </div></section>
 
 <section class="sec soft"><div class="wrap ci">
-  <div class="rv"><div class="hdg rv" id="chuyen-in"><span>02</span><h2>Hệ thống chuyền in</h2></div><p>Chuyền bàn in khung thép, mặt kính, đèn chiếu sáng. Làm theo mặt bằng từng xưởng.</p><a class="ask" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Hỏi giá chuyền in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-  <div class="vids rv"><video controls src="media/chuyen-in-1.mp4" poster="media/chuyen-in-1.jpg" muted loop playsinline preload="metadata" aria-label="Video chuyền in"></video><video controls src="media/chuyen-in-2.mp4" poster="media/chuyen-in-2.jpg" muted loop playsinline preload="metadata" aria-label="Video chuyền in"></video></div>
+  <div class="rv"><div class="hdg rv" id="chuyen-in"><span class="eyb"><i>02</i> Sản phẩm</span><h2>Hệ thống chuyền in</h2></div><p style="color:var(--muted);margin-top:14px;font-size:16.5px">Làm theo mặt bằng từng xưởng.</p><ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Khung thép</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Mặt kính</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Đèn chiếu sáng</li></ul><a class="ask" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Hỏi giá chuyền in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  <div class="vids rv"><video src="media/chuyen-in-1.mp4" poster="media/chuyen-in-1.jpg" muted loop playsinline preload="metadata" aria-label="Video chuyền in"></video><video src="media/chuyen-in-2.mp4" poster="media/chuyen-in-2.jpg" muted loop playsinline preload="metadata" aria-label="Video chuyền in"></video></div>
 </div></section>
 
 <section class="sec"><div class="wrap">
-  <div class="hdg rv" id="ong-gio"><span>03</span><h2>Ống gió</h2></div>
+  <div class="hdg rv" id="ong-gio"><span class="eyb"><i>03</i> Sản phẩm</span><h2>Ống gió</h2><p>Ống gió tròn, ống gió tròn xoắn, ống gió vuông và co ống gió.</p></div>
   <div class="g4"><div class="rv"><figure class="cv"><button type="button" class="lb" data-lb="og0" data-cap="Ống gió tròn"><img src="media/og-tron-dong.jpg" alt="Ống gió tròn" loading="lazy"></button><figcaption><b>Ống gió tròn</b></figcaption></figure></div><div class="rv"><figure class="cv"><button type="button" class="lb" data-lb="og1" data-cap="Ống gió tròn xoắn"><img src="media/og-xoan-b.jpg" alt="Ống gió tròn xoắn" loading="lazy"></button><button type="button" class="lb hid" data-lb="og1" data-cap="Ống gió tròn xoắn"><img src="media/og-xoan-a.jpg" alt="Ống gió tròn xoắn" loading="lazy"></button><button type="button" class="lb hid" data-lb="og1" data-cap="Ống gió tròn xoắn"><img src="media/og-tron-xoan-3.jpg" alt="Ống gió tròn xoắn" loading="lazy"></button><button type="button" class="lb hid" data-lb="og1" data-cap="Ống gió tròn xoắn"><img src="media/ong-gio-tron.jpg" alt="Ống gió tròn xoắn" loading="lazy"></button><figcaption><b>Ống gió tròn xoắn</b><span class="n">4 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv"><button type="button" class="lb" data-lb="og2" data-cap="Ống gió vuông"><img src="media/ong-gio-vuong.jpg" alt="Ống gió vuông" loading="lazy"></button><figcaption><b>Ống gió vuông</b></figcaption></figure></div><div class="rv"><figure class="cv"><button type="button" class="lb" data-lb="og3" data-cap="Co ống gió"><img src="media/og-co-dong.jpg" alt="Co ống gió" loading="lazy"></button><figcaption><b>Co ống gió</b></figcaption></figure></div></div>
 </div></section>
 
 <section class="sec soft"><div class="wrap">
-  <div class="hdg rv" id="phu-kien"><span>04</span><h2>Phụ kiện ống gió</h2></div>
-  <p class="section-note">Chọn sản phẩm để xem ảnh chi tiết.</p>
+  <div class="hdg rv" id="phu-kien"><span class="eyb"><i>04</i> Phụ kiện</span><h2>Phụ kiện ống gió</h2><p>Co, côn, giảm, hộp box, măng xông, rẽ nhánh, chữ Y, ống lượn chữ Z, nón che mưa.</p></div>
   <div class="pks rv"><figure class="pk"><button type="button" class="lb" data-lb="pk0" data-cap="Co 45° tròn xoắn"><img src="media/pk/co45-xoan.jpg" alt="Co 45° tròn xoắn" loading="lazy"></button><figcaption>Co 45° tròn xoắn</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk1" data-cap="Co 90° ống tròn"><img src="media/pk/co90-tron.jpg" alt="Co 90° ống tròn" loading="lazy"></button><button type="button" class="lb hid" data-lb="pk1" data-cap="Co 90° ống tròn"><img src="media/pk/co90-tron-b.jpg" alt="Co 90° ống tròn" loading="lazy"></button><figcaption>Co 90° ống tròn</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk2" data-cap="Co 90° ống vuông"><img src="media/pk/co90-vuong.jpg" alt="Co 90° ống vuông" loading="lazy"></button><button type="button" class="lb hid" data-lb="pk2" data-cap="Co 90° ống vuông"><img src="media/pk/co90-vuong-b.jpg" alt="Co 90° ống vuông" loading="lazy"></button><figcaption>Co 90° ống vuông</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk3" data-cap="Côn vuông tròn"><img src="media/pk/con-vuong-tron.jpg" alt="Côn vuông tròn" loading="lazy"></button><figcaption>Côn vuông tròn</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk4" data-cap="Côn lệch tâm"><img src="media/pk/con-lech-tam.jpg" alt="Côn lệch tâm" loading="lazy"></button><button type="button" class="lb hid" data-lb="pk4" data-cap="Côn lệch tâm"><img src="media/pk/con-lech-tam-b.jpg" alt="Côn lệch tâm" loading="lazy"></button><figcaption>Côn lệch tâm</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk5" data-cap="Giảm thu đều"><img src="media/pk/giam-thu-deu.jpg" alt="Giảm thu đều" loading="lazy"></button><figcaption>Giảm thu đều</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk6" data-cap="Giảm ống tròn"><img src="media/pk/giam-ong-tron.jpg" alt="Giảm ống tròn" loading="lazy"></button><figcaption>Giảm ống tròn</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk7" data-cap="Hộp box"><img src="media/pk/hop-box-1.jpg" alt="Hộp box" loading="lazy"></button><button type="button" class="lb hid" data-lb="pk7" data-cap="Hộp box"><img src="media/pk/hop-box-2.jpg" alt="Hộp box" loading="lazy"></button><figcaption>Hộp box</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk8" data-cap="Hộp box vuông"><img src="media/pk/hop-box-3.jpg" alt="Hộp box vuông" loading="lazy"></button><figcaption>Hộp box vuông</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk9" data-cap="Măng xông"><img src="media/pk/mang-xong.jpg" alt="Măng xông" loading="lazy"></button><figcaption>Măng xông</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk10" data-cap="Rẽ nhánh 2 bên"><img src="media/pk/re-nhanh.jpg" alt="Rẽ nhánh 2 bên" loading="lazy"></button><figcaption>Rẽ nhánh 2 bên</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk11" data-cap="Chữ Y 45°"><img src="media/pk/chu-y-45.jpg" alt="Chữ Y 45°" loading="lazy"></button><button type="button" class="lb hid" data-lb="pk11" data-cap="Chữ Y 45°"><img src="media/pk/chu-y-45-b.jpg" alt="Chữ Y 45°" loading="lazy"></button><figcaption>Chữ Y 45°</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk12" data-cap="Ống lượn chữ Z"><img src="media/pk/ong-luon-z.jpg" alt="Ống lượn chữ Z" loading="lazy"></button><figcaption>Ống lượn chữ Z</figcaption></figure><figure class="pk"><button type="button" class="lb" data-lb="pk13" data-cap="Nón che mưa"><img src="media/non-che-mua.jpg" alt="Nón che mưa" loading="lazy"></button><figcaption>Nón che mưa</figcaption></figure></div>
 </div></section>
 
 <section class="sec"><div class="wrap">
-  <div class="split"><div class="hdg rv" id="thiet-bi"><span>05</span><h2>Thiết bị cho hệ thống</h2></div><a class="ask rv" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Hỏi giá <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  <div class="split"><div class="hdg rv" id="thiet-bi"><span class="eyb"><i>05</i> Thiết bị</span><h2>Thiết bị cho hệ thống</h2><p>Thùng than hoạt tính, lam gió, giảm âm, khóa gió, cùm bích la, chụp khói, sàn thao tác lấy mẫu, cầu hút nhiệt.</p></div><a class="ask rv" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Hỏi giá <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
   <div class="g4"><div class="rv"><figure class="cv tall" id="than-hoat-tinh"><button type="button" class="lb" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-2.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-1.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-3.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-4.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-5.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-6.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-7.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><button type="button" class="lb hid" data-lb="than-hoat-tinh" data-cap="Thùng than hoạt tính"><img src="media/than-8.jpg" alt="Thùng than hoạt tính" loading="lazy"></button><figcaption><b>Thùng than hoạt tính</b><span class="n">8 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv tall" id="lam-gio"><button type="button" class="lb" data-lb="lam-gio" data-cap="Lam gió"><img src="media/lam-2.jpg" alt="Lam gió" loading="lazy"></button><button type="button" class="lb hid" data-lb="lam-gio" data-cap="Lam gió"><img src="media/lam-1.jpg" alt="Lam gió" loading="lazy"></button><button type="button" class="lb hid" data-lb="lam-gio" data-cap="Lam gió"><img src="media/lam-3.jpg" alt="Lam gió" loading="lazy"></button><figcaption><b>Lam gió</b><span class="n">3 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv tall" id="giam-am"><button type="button" class="lb" data-lb="giam-am" data-cap="Giảm âm"><img src="media/giam-am.jpg" alt="Giảm âm" loading="lazy"></button><figcaption><b>Giảm âm</b></figcaption></figure></div><div class="rv"><figure class="cv tall" id="khoa-gio"><button type="button" class="lb" data-lb="khoa-gio" data-cap="Khóa gió"><img src="media/khoa-2.jpg" alt="Khóa gió" loading="lazy"></button><button type="button" class="lb hid" data-lb="khoa-gio" data-cap="Khóa gió"><img src="media/khoa-1.jpg" alt="Khóa gió" loading="lazy"></button><button type="button" class="lb hid" data-lb="khoa-gio" data-cap="Khóa gió"><img src="media/khoa-3.jpg" alt="Khóa gió" loading="lazy"></button><figcaption><b>Khóa gió</b><span class="n">3 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv tall" id="cum-bich"><button type="button" class="lb" data-lb="cum-bich" data-cap="Cùm và bích la"><img src="media/cum.jpg" alt="Cùm và bích la" loading="lazy"></button><button type="button" class="lb hid" data-lb="cum-bich" data-cap="Cùm và bích la"><img src="media/bich.jpg" alt="Cùm và bích la" loading="lazy"></button><figcaption><b>Cùm và bích la</b><span class="n">2 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv tall" id="chup-khoi"><button type="button" class="lb" data-lb="chup-khoi" data-cap="Chụp khói"><img src="media/chup-3.jpg" alt="Chụp khói" loading="lazy"></button><button type="button" class="lb hid" data-lb="chup-khoi" data-cap="Chụp khói"><img src="media/chup-1.jpg" alt="Chụp khói" loading="lazy"></button><button type="button" class="lb hid" data-lb="chup-khoi" data-cap="Chụp khói"><img src="media/chup-2.jpg" alt="Chụp khói" loading="lazy"></button><figcaption><b>Chụp khói</b><span class="n">3 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv tall" id="san-thao-tac"><button type="button" class="lb" data-lb="san-thao-tac" data-cap="Sàn thao tác lấy mẫu"><img src="media/san-0.jpg" alt="Sàn thao tác lấy mẫu" loading="lazy"></button><button type="button" class="lb hid" data-lb="san-thao-tac" data-cap="Sàn thao tác lấy mẫu"><img src="media/san-1.jpg" alt="Sàn thao tác lấy mẫu" loading="lazy"></button><button type="button" class="lb hid" data-lb="san-thao-tac" data-cap="Sàn thao tác lấy mẫu"><img src="media/san-2.jpg" alt="Sàn thao tác lấy mẫu" loading="lazy"></button><button type="button" class="lb hid" data-lb="san-thao-tac" data-cap="Sàn thao tác lấy mẫu"><img src="media/san-3.jpg" alt="Sàn thao tác lấy mẫu" loading="lazy"></button><button type="button" class="lb hid" data-lb="san-thao-tac" data-cap="Sàn thao tác lấy mẫu"><img src="media/san-4.jpg" alt="Sàn thao tác lấy mẫu" loading="lazy"></button><button type="button" class="lb hid" data-lb="san-thao-tac" data-cap="Sàn thao tác lấy mẫu"><img src="media/san-5.jpg" alt="Sàn thao tác lấy mẫu" loading="lazy"></button><figcaption><b>Sàn thao tác lấy mẫu</b><span class="n">6 ảnh</span></figcaption></figure></div><div class="rv"><figure class="cv tall" id="cau-hut-nhiet"><button type="button" class="lb" data-lb="cau-hut-nhiet" data-cap="Cầu hút nhiệt"><img src="media/cau-1.jpg" alt="Cầu hút nhiệt" loading="lazy"></button><button type="button" class="lb hid" data-lb="cau-hut-nhiet" data-cap="Cầu hút nhiệt"><img src="media/cau-2.jpg" alt="Cầu hút nhiệt" loading="lazy"></button><button type="button" class="lb hid" data-lb="cau-hut-nhiet" data-cap="Cầu hút nhiệt"><img src="media/cau-4.jpg" alt="Cầu hút nhiệt" loading="lazy"></button><button type="button" class="lb hid" data-lb="cau-hut-nhiet" data-cap="Cầu hút nhiệt"><img src="media/cau-3.jpg" alt="Cầu hút nhiệt" loading="lazy"></button><figcaption><b>Cầu hút nhiệt</b><span class="n">4 ảnh</span></figcaption></figure></div></div>
 </div></section>
 
 <section class="sec soft"><div class="wrap">
-  <div class="hdg rv" id="cong-trinh"><span>06</span><h2>Công trình đã thi công</h2></div>
-  <p class="section-note">Hình ảnh thực tế tại các công trình. Nhấn vào ảnh để xem đầy đủ.</p>
+  <div class="hdg rv" id="cong-trinh"><span class="eyb"><i>06</i> Dự án</span><h2>Công trình đã thi công</h2></div>
   <div class="proj rv"><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-01.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-02.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-03.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-04.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-05.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-06.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-07.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-08.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-09.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-10.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-11.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-12.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-13.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-14.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-15.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-16.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-17.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-18.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-19.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-20.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-21.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-22.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-23.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-24.jpg" alt="Công trình đã thi công" loading="lazy"></button></div>
 </div></section>
 
 <section class="cta" id="lien-he"><div class="wrap">
   <div class="rv">
-    <span class="co">Liên hệ đặt hàng</span>
+    <span class="eyb">Liên hệ đặt hàng</span>
+    <h2>Cần báo giá? Gọi ngay cho xưởng</h2>
     <a class="ph" href="tel:0909782916">0909 782 916</a>
-    <p class="ad">2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh<br>MST 0317185014</p>
-    <div class="bt"><a class="btn g" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Gọi ngay</a><a class="btn z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Nhắn Zalo</a></div>
+    <p class="ad"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>MST 0317185014</span></p>
+    <div class="bt"><a class="btn a" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Gọi ngay</a><a class="btn z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Nhắn Zalo</a></div>
   </div>
   <a class="map rv" href="https://maps.app.goo.gl/JYkuAFXA1WdDJizE8" target="_blank" rel="noopener" aria-label="Mở Google Maps chỉ đường đến xưởng">
-    <svg viewBox="0 0 400 200" aria-hidden="true"><rect width="400" height="200" fill="#eef1ee"/><g fill="#e1e6e2"><rect x="14" y="12" width="100" height="62" rx="4"/><rect x="152" y="10" width="96" height="58" rx="4"/><rect x="290" y="14" width="96" height="56" rx="4"/><rect x="16" y="130" width="96" height="58" rx="4"/><rect x="156" y="126" width="94" height="62" rx="4"/><rect x="292" y="122" width="94" height="66" rx="4"/></g><g stroke="#fff" fill="none"><path d="M-10 108L410 92" stroke-width="20"/><path d="M134 -10L140 210" stroke-width="9"/><path d="M272 -10L266 210" stroke-width="9"/></g><text x="20" y="104" transform="rotate(-2.2 20 104)" font-size="11" font-weight="600" fill="#7a817c" font-family="Be Vietnam Pro, system-ui, sans-serif">Trần Văn Giàu</text><g class="pin"><path d="M206 100c-11-13-16-19-16-28a16 16 0 0 1 32 0c0 9-5 15-16 28z" fill="#166534"/><circle cx="206" cy="72" r="6" fill="#fff"/></g><rect x="226" y="58" width="112" height="24" rx="12" fill="#fff"/><text x="238" y="74" font-size="11.5" font-weight="700" fill="#121614" font-family="Be Vietnam Pro, system-ui, sans-serif">Cơ Khí Trung Nhất</text></svg>
+    <svg viewBox="0 0 400 200" aria-hidden="true"><rect width="400" height="200" fill="#eef1ee"/><g fill="#e1e6e2"><rect x="14" y="12" width="100" height="62" rx="4"/><rect x="152" y="10" width="96" height="58" rx="4"/><rect x="290" y="14" width="96" height="56" rx="4"/><rect x="16" y="130" width="96" height="58" rx="4"/><rect x="156" y="126" width="94" height="62" rx="4"/><rect x="292" y="122" width="94" height="66" rx="4"/></g><g stroke="#fff" fill="none"><path d="M-10 108L410 92" stroke-width="20"/><path d="M134 -10L140 210" stroke-width="9"/><path d="M272 -10L266 210" stroke-width="9"/></g><text x="20" y="104" transform="rotate(-2.2 20 104)" font-size="11" font-weight="600" fill="#7a817c" font-family="Be Vietnam Pro, system-ui, sans-serif">Trần Văn Giàu</text><g class="pin"><path d="M206 100c-11-13-16-19-16-28a16 16 0 0 1 32 0c0 9-5 15-16 28z" fill="#1a4a80"/><circle cx="206" cy="72" r="6" fill="#fff"/></g><rect x="226" y="58" width="112" height="24" rx="12" fill="#fff"/><text x="238" y="74" font-size="11.5" font-weight="700" fill="#121614" font-family="Be Vietnam Pro, system-ui, sans-serif">Cơ Khí Trung Nhất</text></svg>
     <span>Chỉ đường trên Google Maps <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
   </a>
 </div></section>
 </main>
-<footer><div class="wrap">© 2026 Công ty TNHH Sản Xuất Thương Mại Cơ Khí Trung Nhất</div></footer>
+<footer>
+  <div class="wrap ft">
+    <div><a href="#top" aria-label="Cơ Khí Trung Nhất – về đầu trang"><span class="logo w"><img src="media/logo-trang.png" alt="Logo Trung Nhất" width="900" height="545" loading="lazy"></span></a><p>Công ty TNHH Sản Xuất Thương Mại Cơ Khí Trung Nhất<br>MST 0317185014</p></div>
+    <div><h4>Sản phẩm</h4><ul><li><a href="#hut-mui">Hệ thống hút mùi</a></li><li><a href="#chuyen-in">Chuyền in</a></li><li><a href="#ong-gio">Ống gió</a></li><li><a href="#phu-kien">Phụ kiện ống gió</a></li><li><a href="#thiet-bi">Thiết bị</a></li></ul></div>
+    <div><h4>Liên hệ</h4><ul><li><a href="tel:0909782916">0909 782 916</a></li><li><a href="https://zalo.me/0909782916" target="_blank" rel="noopener">Zalo: 0909 782 916</a></li><li>2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh</li><li>MST 0317185014</li></ul></div>
+  </div>
+  <div class="wrap cp">© 2026 Công ty TNHH Sản Xuất Thương Mại Cơ Khí Trung Nhất</div>
+</footer>
 
 <div class="bar"><a class="btn g" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>0909 782 916</a><a class="btn z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Zalo</a></div>
 <div class="lbx" id="lbx" role="dialog" aria-modal="true" aria-label="Xem ảnh">
@@ -296,29 +378,28 @@ const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
 const links=$$('.nav a'), targets=links.map(a=>$(a.getAttribute('href')));
 function spy(){ let cur=-1; targets.forEach((t,i)=>{ if(t&&t.getBoundingClientRect().top<140) cur=i; }); links.forEach((a,i)=>a.classList.toggle('on',i===cur)); }
-addEventListener('scroll',spy,{passive:true}); spy();
+const hd=$('#hd'); function onScroll(){ spy(); hd.classList.toggle('sc',scrollY>40); }
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
 if(!RM){ const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.remove('pre'); io.unobserve(e.target);} }),{rootMargin:'0px 0px -6% 0px'});
   $$('.rv').forEach(el=>{ const sib=[...el.parentElement.children].filter(c=>c.classList.contains('rv')); el.style.transitionDelay=(Math.min(sib.indexOf(el),6)*70)+'ms';
     if(el.getBoundingClientRect().top>innerHeight) el.classList.add('pre'); io.observe(el); }); }
 const vio=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target; if(e.isIntersecting&&!RM){const p=v.play(); if(p&&p.catch)p.catch(()=>{});} else v.pause();}),{threshold:.3});
-// Explicit player controls preserve the visitor's playback choices.
-$$('video').forEach(v=>{v.controls=true;});
+$$('video').forEach(v=>{vio.observe(v); v.addEventListener('click',()=>{v.controls=true;});});
 const lbx=$('#lbx'), I=$('#lbxI'), C=$('#lbxC'), N=$('#lbxN'); let set=[], li=0, back=null;
 function show(i,a){ li=(i+set.length)%set.length; const b=set[li];
   const go=()=>{ I.src=b.querySelector('img').getAttribute('src'); I.alt=b.dataset.cap; C.textContent=b.dataset.cap; N.textContent=(li+1)+' / '+set.length; I.classList.remove('sw'); };
   if(a&&!RM){ I.classList.add('sw'); setTimeout(go,140); } else go();
   $('#lbxP').hidden=$('#lbxNx').hidden=set.length<2; }
-function open(b){ set=$$('button.lb[data-lb="'+b.dataset.lb+'"]'); back=b; show(set.indexOf(b)); lbx.classList.add('open'); document.querySelector('main').inert=true; document.querySelector('header').inert=true; document.querySelector('footer').inert=true; document.querySelector('.bar').inert=true; document.body.style.overflow='hidden'; $('#lbxX').focus(); }
-function close(){ lbx.classList.remove('open'); document.querySelector('main').inert=false; document.querySelector('header').inert=false; document.querySelector('footer').inert=false; document.querySelector('.bar').inert=false; document.body.style.overflow=''; if(back) back.focus(); }
+function open(b){ set=$$('button.lb[data-lb="'+b.dataset.lb+'"]'); back=b; show(set.indexOf(b)); lbx.classList.add('open'); document.body.style.overflow='hidden'; $('#lbxX').focus(); }
+function close(){ lbx.classList.remove('open'); document.body.style.overflow=''; if(back) back.focus(); }
 $$('button.lb').forEach(b=>b.addEventListener('click',()=>open(b)));
 $('#lbxX').addEventListener('click',close); $('#lbxP').addEventListener('click',()=>show(li-1,1)); $('#lbxNx').addEventListener('click',()=>show(li+1,1));
 lbx.addEventListener('click',e=>{ if(e.target===lbx||e.target.id==='lbxS') close(); });
-addEventListener('keydown',e=>{ if(!lbx.classList.contains('open')) return; if(e.key==='Tab'){ const focusable=[...lbx.querySelectorAll('button:not([hidden])')]; const first=focusable[0], last=focusable[focusable.length-1]; if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();} } if(e.key==='Escape')close(); if(e.key==='ArrowLeft')show(li-1,1); if(e.key==='ArrowRight')show(li+1,1); });
+addEventListener('keydown',e=>{ if(!lbx.classList.contains('open')) return; if(e.key==='Escape')close(); if(e.key==='ArrowLeft')show(li-1,1); if(e.key==='ArrowRight')show(li+1,1); });
 let sx=null; $('#lbxS').addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
 $('#lbxS').addEventListener('touchend',e=>{ if(sx===null)return; const d=e.changedTouches[0].clientX-sx; if(Math.abs(d)>50) show(li+(d<0?1:-1),1); sx=null; });
 })();
 </script>
 
-<script src="ui-polish.js" defer></script>
 </body>
 </html>
