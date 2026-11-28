@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Quản trị — Cơ Khí Trung Nhất</title>
+  <link rel="icon" href="/media/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="/admin/admin.css">
+  <script type="module" src="/admin/admin.js"></script>
+</head>
+<body>
+  <header class="admin-header"><a href="/" class="brand"><img src="/media/logo.png" alt="Trung Nhất" width="100" height="61"><span>Cơ Khí Trung Nhất<small>Quản trị nội dung</small></span></a><a href="/" class="subtle">Xem website</a></header>
+  <main>
+    <section id="login-panel" class="login-panel">
+      <span class="eyebrow">DÀNH CHO QUẢN TRỊ VIÊN</span><h1>Đăng nhập</h1><p class="muted">Đăng bài, chia sẻ ảnh công trình và theo dõi khách ghé thăm.</p>
+      <div id="setup-notice" class="notice" hidden>Chưa kết nối kho dữ liệu. Cần hoàn tất cấu hình Supabase và cấp quyền cho tài khoản quản trị trước khi đăng bài.</div>
+      <form id="login-form">
+        <label for="email">Email quản trị</label><input id="email" name="email" type="email" autocomplete="username" required maxlength="254">
+        <label for="password">Mật khẩu</label><input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button class="primary full" id="login-button" type="submit">Đăng nhập</button>
+        <p id="login-message" role="status" aria-live="polite" class="message"></p>
+      </form>
+    </section>
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="page-heading"><div><span class="eyebrow">QUẢN TRỊ WEBSITE</span><h1>Bài viết & khách ghé thăm</h1><p id="account" class="muted"></p></div><button id="logout" class="secondary" type="button">Đăng xuất</button></div>
+      <div class="stats"><article><span>Tổng khách ghé thăm</span><strong id="stats-total">—</strong><small>Theo trình duyệt, từ lúc bật bộ đếm</small></article><article><span>Khách ghé hôm nay</span><strong id="stats-today">—</strong><small>Mỗi trình duyệt chỉ tính một lần/ngày</small></article><article class="stats-note"><p>Số liệu tính theo giờ Việt Nam. Một người dùng nhiều thiết bị có thể được tính nhiều lần.</p><button id="refresh-stats" type="button" class="text-button">Cập nhật số liệu</button><p id="stats-message" class="message" role="status"></p></article></div>
+      <div class="workspace">
+        <section class="panel editor"><div class="panel-heading"><h2 id="editor-title">Viết bài mới</h2><button id="new-post" type="button" class="text-button">Tạo bài mới</button></div>
+          <form id="post-form">
+            <label for="title">Tiêu đề bài viết</label><input id="title" maxlength="160" required placeholder="Nhập tiêu đề…">
+            <label for="description">Mô tả / nội dung</label><textarea id="description" maxlength="10000" rows="9" required placeholder="Giới thiệu công trình, sản phẩm hoặc nội dung muốn chia sẻ…"></textarea>
+            <div class="field-top"><label for="images">Ảnh bài viết</label><span id="image-count" class="muted">0 / 8 ảnh</span></div>
+            <div class="upload-zone"><input id="images" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-describedby="image-hint"><p id="image-hint">Chọn tối đa 8 ảnh JPG, PNG hoặc WebP; tối đa 5 MB/ảnh. Ảnh đầu tiên là ảnh bìa.</p></div>
+            <div id="image-previews" class="image-previews" aria-live="polite"></div>
+            <label for="status">Trạng thái</label><select id="status"><option value="published">Đăng công khai</option><option value="draft">Lưu bản nháp</option><option value="archived">Ẩn bài viết</option></select>
+            <div class="form-actions"><button id="save-post" type="submit" class="primary">Lưu bài viết</button><span id="saving-progress" class="muted" role="status"></span></div>
+            <p id="post-message" class="message" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+        <section class="panel posts-panel"><div class="panel-heading"><h2>Bài đã lưu</h2><button id="refresh-posts" type="button" class="text-button">Làm mới</button></div><p id="posts-message" class="message" role="status"></p><div id="post-list" class="post-list"></div><div class="pagination"><button id="previous-page" type="button" class="secondary" disabled>Trang trước</button><span id="page-label" class="muted">Trang 1</span><button id="next-page" type="button" class="secondary" disabled>Trang sau</button></div></section>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

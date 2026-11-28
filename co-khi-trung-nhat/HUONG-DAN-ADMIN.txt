@@ -1,0 +1,64 @@
+THIẾT LẬP ĐĂNG BÀI VÀ BỘ ĐẾM CHO CƠ KHÍ TRUNG NHẤT
+
+Trang quản trị: https://www.cokhitrungnhat.com/admin/
+Trang chủ tự hiện mục Tin mới từ xưởng khi có bài công khai.
+
+1. TẠO KHO DỮ LIỆU
+Tạo một dự án tại https://supabase.com/dashboard dành cho website này.
+Trong SQL Editor, mở New query, dán toàn bộ supabase/setup.sql rồi Run.
+Chạy script một lần. Nếu bị lỗi, giao dịch tự hoàn tác; gửi lỗi để xử lý.
+
+2. TẠO ADMIN
+Authentication > Users > Add user > Create new user.
+Tạo bằng email và mật khẩu của bạn, bật Auto Confirm User.
+Không cần bật đăng ký công khai. Nên tắt Allow new users to sign up
+trong Authentication > Sign In / Providers để tránh tài khoản không cần thiết.
+Sau đó chạy câu SQL sau, thay email thật:
+
+insert into public.tn_admins(user_id)
+select id from auth.users where email = 'EMAIL_CUA_BAN'
+on conflict do nothing;
+
+Chỉ những tài khoản được thêm vào tn_admins mới sửa hoặc đăng bài được.
+Không gửi mật khẩu cho người khác hoặc đưa mật khẩu vào mã nguồn.
+
+3. KẾT NỐI WEB
+Lấy Project URL và Publishable key trong Project Settings > API Keys /
+Connect. Có thể dùng legacy anon key thay Publishable key.
+Điền hai thông tin công khai này vào site-config.js:
+  supabaseUrl: 'https://TEN_DU_AN.supabase.co'
+  supabaseKey: 'sb_publishable_...'
+TUYỆT ĐỐI không dùng secret key, service_role key hoặc database password.
+Đẩy file cấu hình lên repo -df/co-khi-trung-nhat để Vercel cập nhật.
+Bạn có thể gửi Project URL và Publishable key để mình nối giúp.
+
+4. ĐĂNG BÀI
+Mở /admin/, đăng nhập bằng tài khoản đã cấp quyền.
+Nhập tiêu đề, mô tả, chọn tối đa 8 ảnh JPG/PNG/WebP, mỗi ảnh tối đa 5 MB.
+Ảnh đầu tiên là ảnh bìa. Bỏ ảnh rồi chọn thêm để đổi thứ tự.
+Chọn Đăng công khai hoặc Lưu bản nháp, sau đó Lưu bài viết.
+Mục Bài đã lưu có nút Chỉnh sửa, Ẩn bài, Đăng công khai.
+Ẩn bài không xóa dữ liệu hoặc ảnh, có thể đăng lại.
+Nếu quên mật khẩu, chủ dự án đặt lại trong Supabase Authentication.
+
+5. CÁCH ĐẾM KHÁCH
+Tổng khách: số ID trình duyệt khác nhau kể từ khi bật tính năng.
+Hôm nay: mỗi ID trình duyệt chỉ tính một lần/ngày theo giờ Việt Nam.
+Tải lại trang không cộng thêm. Một người dùng nhiều thiết bị hoặc xóa
+dữ liệu trình duyệt có thể được tính nhiều lần. Đây không phải số người
+đang online và không phải số khách lịch sử trước khi bật bộ đếm.
+Nếu trình duyệt chặn lưu trữ, không cộng khách để tránh đếm sai.
+Không lưu IP, tên, số điện thoại hoặc email của khách.
+Bộ đếm công khai có thể bị bot tạo ID mới, nên chỉ dùng tham khảo;
+không dùng làm thống kê kiểm toán hoặc tính doanh thu/quảng cáo.
+
+Chưa cấu hình hoặc khi dữ liệu lỗi: website không hiển thị số giả hay
+bài mẫu. Trang admin báo rõ chưa kết nối. Đăng bài mới không cần build
+lại website: nội dung và ảnh được lưu tại Supabase.
+
+BẢO VỆ DỮ LIỆU
+Quyền đăng bài được kiểm tra bằng Row Level Security tại máy chủ.
+Không có quyền xóa bài hoặc sửa số đếm trực tiếp từ trình duyệt.
+Ảnh trong bucket tn-post-images có link công khai, kể cả ảnh bài nháp
+hoặc đã ẩn. Không tải tài liệu riêng tư lên đây. Bài nháp/ẩn không được
+trả về trong danh sách công khai; file ảnh còn nguyên để dễ đăng lại.

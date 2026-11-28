@@ -1,4 +1,10 @@
 exports/
 backups/
+_anh-goc/
+.claude/
+media nét zalo/
+supabase/
+tests/
+HUONG-DAN-ADMIN.txt
 README.md
 *.zip

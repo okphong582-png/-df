@@ -280,6 +280,8 @@ footer{background:#06111f;color:#8b9bb0;font-size:14px}
 }
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}.rv.pre{opacity:1;transform:none}}
 </style>
+<link rel="stylesheet" href="/assets/news.css">
+<script type="module" src="/assets/news.js"></script>
 </head>
 <body>
 
@@ -335,6 +337,12 @@ footer{background:#06111f;color:#8b9bb0;font-size:14px}
   <div class="proj rv"><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-01.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-02.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-03.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-04.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-05.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-06.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-07.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-08.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-09.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-10.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-11.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-12.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-13.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-14.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-15.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-16.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-17.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-18.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-19.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-20.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-21.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-22.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-23.jpg" alt="Công trình đã thi công" loading="lazy"></button><button type="button" class="lb" data-lb="ct" data-cap="Công trình đã thi công"><img src="media/ct/ct-24.jpg" alt="Công trình đã thi công" loading="lazy"></button></div>
 </div></section>
 
+<section class="sec soft" id="tin-moi" hidden><div class="wrap">
+  <div class="hdg"><span class="eyb">Cập nhật</span><h2>Tin mới từ xưởng</h2></div>
+  <div id="news-grid" class="news-grid"></div>
+  <button id="news-more" class="news-more" type="button" hidden>Xem thêm bài viết</button>
+  <p id="news-message" class="news-message" role="status"></p>
+</div></section>
 <section class="cta" id="lien-he"><div class="wrap">
   <div class="rv">
     <span class="eyb">Liên hệ đặt hàng</span>
@@ -355,7 +363,8 @@ footer{background:#06111f;color:#8b9bb0;font-size:14px}
     <div><h4>Sản phẩm</h4><ul><li><a href="#hut-mui">Hệ thống hút mùi</a></li><li><a href="#chuyen-in">Chuyền in</a></li><li><a href="#ong-gio">Ống gió</a></li><li><a href="#phu-kien">Phụ kiện ống gió</a></li><li><a href="#thiet-bi">Thiết bị</a></li></ul></div>
     <div><h4>Liên hệ</h4><ul><li><a href="tel:0909782916">0909 782 916</a></li><li><a href="https://zalo.me/0909782916" target="_blank" rel="noopener">Zalo: 0909 782 916</a></li><li>2148 Trần Văn Giàu, Ấp 5, Xã Tân Vĩnh Lộc, TP. Hồ Chí Minh</li><li>MST 0317185014</li></ul></div>
   </div>
-  <div class="wrap cp">© 2026 Công ty TNHH Sản Xuất Thương Mại Cơ Khí Trung Nhất</div>
+  <div id="visitor-area" class="wrap" hidden><div class="visitor-count"><span>Khách ghé thăm: <strong id="visitors-total"></strong></span><span>Hôm nay: <strong id="visitors-today"></strong></span></div><small class="visitor-note">Thống kê theo trình duyệt kể từ khi bật bộ đếm.</small></div>
+  <div class="wrap cp footer-bottom"><span>© 2026 Công ty TNHH Sản Xuất Thương Mại Cơ Khí Trung Nhất</span><a class="admin-link" href="/admin/">Quản trị</a></div>
 </footer>
 
 <div class="bar"><a class="btn g" href="tel:0909782916"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>0909 782 916</a><a class="btn z" href="https://zalo.me/0909782916" target="_blank" rel="noopener">Zalo</a></div>
@@ -393,5 +402,6 @@ $('#lbxS').addEventListener('touchend',e=>{ if(sx===null)return; const d=e.chang
 })();
 </script>
 
+<dialog id="post-dialog" class="post-dialog" aria-label="Chi tiết bài viết"><div class="post-dialog-head"><button id="post-close" class="post-dialog-close" type="button">Đóng bài viết</button></div><article id="post-body" class="post-dialog-body"></article></dialog>
 </body>
 </html>
